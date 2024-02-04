@@ -39,3 +39,9 @@
    [:input {:type "submit"
             :class "bg-clj-blue p-1.5 rounded-lg text-white w-24"
             :value label}]])
+
+(defn warning [msg]
+  [:span {:class "bg-red-600 p-2 rounded-lg text-white"} msg])
+
+(defn h1 [& contents]
+  [:h1.text-3xl contents])

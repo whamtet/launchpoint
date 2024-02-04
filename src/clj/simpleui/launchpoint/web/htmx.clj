@@ -4,6 +4,7 @@
    [hiccup.page :as p]
    [ring.util.http-response :as http-response]
    [simpleui.core :as simpleui]
+   [simpleui.launchpoint.i18n :refer [i18n]]
    [simpleui.launchpoint.web.resource-cache :as resource-cache]
    [simpleui.render :as render]))
 
@@ -27,7 +28,7 @@
   (page
    [:head
     [:meta {:charset "UTF-8"}]
-    [:title "SimpleUI Launchpoint"]
+    [:title (i18n "SimpleUI Launchpoint")]
     [:link {:rel "icon" :href "/logo_dark.svg"}]
     (for [sheet css]
       [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
