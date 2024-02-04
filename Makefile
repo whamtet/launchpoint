@@ -7,7 +7,7 @@ run:
 repl:
 	clj -M:dev:nrepl
 
-test:
+testx:
 	clj -M:test
 
 uberjar:

@@ -10,3 +10,6 @@
                  (log/info "\n-=[launchpoint has shut down successfully]=-"))
    :middleware (fn [handler _] handler)
    :opts       {:profile :prod}})
+
+(def dev? false)
+(def prod? true)

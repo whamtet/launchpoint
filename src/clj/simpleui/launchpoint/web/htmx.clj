@@ -1,9 +1,10 @@
 (ns simpleui.launchpoint.web.htmx
   (:require
-   [simpleui.render :as render]
-   [ring.util.http-response :as http-response]
    [hiccup.core :as h]
-   [hiccup.page :as p]))
+   [hiccup.page :as p]
+   [ring.util.http-response :as http-response]
+   [simpleui.launchpoint.web.resource-cache :as resource-cache]
+   [simpleui.render :as render]))
 
 (defn page [opts & content]
   (-> (p/html5 opts content)
@@ -25,8 +26,10 @@
   (page
    [:head
     [:meta {:charset "UTF-8"}]
-    [:title "Launchpoint"]
-    [:link {:rel "icon" :href "/favicon.ico"}]]
+    [:title "SimpleUI Launchpoint"]
+    [:link {:rel "icon" :href "/favicon.ico"}]
+    (for [sheet css]
+      [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
    [:body
     (render/walk-attrs body)
     (htmx)

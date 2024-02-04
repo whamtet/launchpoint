@@ -1,0 +1,35 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="-500 0 1600 900">
+   <style>
+      .blue {
+      fill: #97B3F8;
+      stroke: #97B3F8;
+      }
+
+      .green {
+      fill: #A2DA5F;
+      stroke: #A2DA5F;
+      }
+   </style>
+
+   <path class="green"
+d="M525 810q-37 0 -58.5 -18.5t-37.5 -62.5l-73 -205q-8 -24 -18.5 -53.5t-19 -58t-12.5 -47.5h-4q-9 35 -23.5 75t-31.5 79l-122 281h-91l231 -526l-27 -75q-16 -43 -35 -67.5t-62 -24.5q-18 0 -31.5 2t-24.5 4v-71q14 -3 31 -5.5t35 -2.5q52 0 83.5 18t53 55t41.5 95
+l173 482q19 54 50 54q8 0 16.5 -2t13.5 -3v65q-11 5 -25.5 8.5t-31.5 3.5z" />
+
+   <polygon class="blue" points="
+   -10,150
+   -400,385 -400,485
+   -10,720 -10,620
+   -280,435
+   -10,250" />
+
+   <polygon class="blue" points="
+   640,150
+   1030,385 1030,485
+   640,720 640,620
+   910,435
+   640,250" />
+
+
+</svg>
