@@ -4,13 +4,12 @@
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]))
 
-;;
-[:div.border-r.bg-slate-200]
-
-(defn- grey-out [s grey?]
-  (if grey?
-    (str s " bg-slate-200")
-    s))
+[:div.bg-clj-blue-light.text-gray-500]
+(defn- highlight [s highlighted?]
+  (str s
+       (if highlighted?
+         " bg-clj-blue-light"
+         " text-gray-500")))
 
 (def login-form
   [:form.pt-3 {:hx-post "login:login"}
@@ -18,9 +17,24 @@
    (components/password (i18n "Password") "password")
    (components/submit (i18n "Login"))])
 
-(def registration-form [:div])
+(defn registration-form [first-name last-name email]
+  [:form.pt-3 {:hx-post "login:register"}
+   (components/hidden "register" true)
+   (components/text (i18n "First name") "first-name" first-name :required)
+   (components/text (i18n "Last name") "last-name" last-name :required)
+   (components/email (i18n "Email") "email" email :required)
+   (components/password (i18n "Password") "password" :required)
+   (components/password (i18n "Password Confirm") "password2" :required)
+   (components/submit (i18n "Register"))])
 
-(defcomponent ^:endpoint login [req register email password command]
+(defcomponent ^:endpoint login [req
+                                register
+                                first-name
+                                last-name
+                                email
+                                password
+                                password2
+                                command]
   (case command
         "login" (prn 'xx email password)
         [:div {:hx-target "this"}
@@ -32,13 +46,13 @@
           [:div.border-b.flex.text-center
            [:a {:href ""
                 :hx-get "login"
-                :class (grey-out "w-1/2 border-r p-1" register)}
+                :class (highlight "w-1/2 border-r p-1" (not register))}
              (i18n "Login")]
            [:a {:href ""
                 :hx-get "login"
                 :hx-vals {:register true}
-                :class (grey-out "w-1/2 p-1" (not register))}
+                :class (highlight "w-1/2 p-1" register)}
              (i18n "Register")]]
           (if register
-            registration-form
+            (registration-form first-name last-name email)
             login-form)]]))
