@@ -44,8 +44,7 @@
   [name [req :as args] & body]
   (if-let [sym (simpleui/symbol-or-as req)]
     `(simpleui/defcomponent ~name ~args
-      (let [{:keys [~'session ~'path-params ~'query-fn ~'conn ~'context]} ~sym
-            ~'context (or (not-empty ~'context) {:query-fn ~'query-fn :conn ~'conn})
+      (let [{:keys [~'session ~'path-params ~'query-fn]} ~sym
             ~'params (merge ~'params ~'path-params)
             {:keys [~'id]} ~'session]
         ~@body))

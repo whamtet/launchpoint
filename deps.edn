@@ -3,6 +3,8 @@
 
  :deps    {org.clojure/clojure {:mvn/version "1.11.1"}
 
+           crypto-password/crypto-password {:mvn/version "0.3.0"}
+
            ;; Routing
  metosin/reitit {:mvn/version "0.6.0"}
 

@@ -26,4 +26,4 @@
   [_ {:keys [base-path]
       :or   {base-path ""}
       :as   opts}]
-  [base-path (route-data opts) (home/ui-routes base-path)])
+  [base-path (route-data opts) (home/ui-routes opts)])

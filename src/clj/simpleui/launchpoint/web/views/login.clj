@@ -14,9 +14,9 @@
 
 (def login-form
   [:form.pt-3 {:hx-post "login:login"}
-   (components/email "Email" "email")
-   (components/password "Password" "password")
-   (components/submit "Login")])
+   (components/email (i18n "Email") "email")
+   (components/password (i18n "Password") "password")
+   (components/submit (i18n "Login"))])
 
 (def registration-form [:div])
 
@@ -28,14 +28,17 @@
           [:img.w-24 {:src "/logo.svg"}]]
          [:div {:class "mt-24
    mx-auto w-1/2
-   border rounded-lg"}
+   border rounded-lg overflow-hidden"}
           [:div.border-b.flex.text-center
-           [:div {:class (grey-out "w-1/2 border-r p-1" register)}
-            [:a {:href "" :hx-get "login"}
-             (i18n "Login")]]
-           [:div {:class (grey-out "w-1/2 p-1" (not register))}
-            [:a {:href "" :hx-get "login" :hx-vals {:register true}}
-             (i18n "Register")]]]
+           [:a {:href ""
+                :hx-get "login"
+                :class (grey-out "w-1/2 border-r p-1" register)}
+             (i18n "Login")]
+           [:a {:href ""
+                :hx-get "login"
+                :hx-vals {:register true}
+                :class (grey-out "w-1/2 p-1" (not register))}
+             (i18n "Register")]]
           (if register
             registration-form
             login-form)]]))
