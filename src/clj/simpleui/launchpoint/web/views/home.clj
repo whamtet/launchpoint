@@ -10,4 +10,4 @@
    (fn [req]
      (page-htmx
       {:css ["/output.css"]}
-      login/login))))
+      (login/login req)))))

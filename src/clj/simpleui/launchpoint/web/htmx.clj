@@ -3,6 +3,7 @@
    [hiccup.core :as h]
    [hiccup.page :as p]
    [ring.util.http-response :as http-response]
+   [simpleui.core :as simpleui]
    [simpleui.launchpoint.web.resource-cache :as resource-cache]
    [simpleui.render :as render]))
 
@@ -27,7 +28,7 @@
    [:head
     [:meta {:charset "UTF-8"}]
     [:title "SimpleUI Launchpoint"]
-    [:link {:rel "icon" :href "/favicon.ico"}]
+    [:link {:rel "icon" :href "/logo_dark.svg"}]
     (for [sheet css]
       [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
    [:body
@@ -38,3 +39,14 @@
       [:script {:src js}])
     (when google?
           [:script {:src "https://accounts.google.com/gsi/client" :async true :defer true}])]))
+
+(defmacro defcomponent
+  [name [req :as args] & body]
+  (if-let [sym (simpleui/symbol-or-as req)]
+    `(simpleui/defcomponent ~name ~args
+      (let [{:keys [~'session ~'path-params ~'query-fn ~'conn ~'context]} ~sym
+            ~'context (or (not-empty ~'context) {:query-fn ~'query-fn :conn ~'conn})
+            ~'params (merge ~'params ~'path-params)
+            {:keys [~'id]} ~'session]
+        ~@body))
+    (throw (Exception. "req ill defined"))))
