@@ -15,10 +15,23 @@
       http-response/ok
       (http-response/content-type "text/html")))
 
-(defn page-htmx [& body]
+(defn- htmx []
+  [:script {:src
+            (if false ;(dev?)
+              "/htmx.js"
+              "https://unpkg.com/htmx.org@1.9.5/dist/htmx.min.js")}])
+
+(defn page-htmx [{:keys [css js google?]} & body]
   (page
    [:head
     [:meta {:charset "UTF-8"}]
-    [:title "Htmx + Kit"]
-    [:script {:src "https://unpkg.com/htmx.org@1.2.0/dist/htmx.min.js" :defer true}]]
-   [:body (render/walk-attrs body)]))
+    [:title "Launchpoint"]
+    [:link {:rel "icon" :href "/favicon.ico"}]]
+   [:body
+    (render/walk-attrs body)
+    (htmx)
+    [:script "htmx.config.defaultSwapStyle = 'outerHTML';"]
+    (for [js js]
+      [:script {:src js}])
+    (when google?
+          [:script {:src "https://accounts.google.com/gsi/client" :async true :defer true}])]))

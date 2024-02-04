@@ -1,4 +1,4 @@
-(ns simpleui.launchpoint.web.views.hello
+(ns simpleui.launchpoint.web.views.home
     (:require
       [simpleui.core :as simpleui :refer [defcomponent]]
       [simpleui.launchpoint.web.htmx :refer [page-htmx]]))
