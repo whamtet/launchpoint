@@ -5,16 +5,16 @@
     [simpleui.launchpoint.config :as config]
     [simpleui.launchpoint.env :refer [defaults]]
 
-    ;; Edges       
+    ;; Edges
     [kit.edge.server.undertow]
     [simpleui.launchpoint.web.handler]
 
     ;; Routes
     [simpleui.launchpoint.web.routes.api]
-    
-    [kit.edge.db.sql.conman] 
-    [kit.edge.db.sql.migratus] 
-    [simpleui.launchpoint.web.routes.ui] 
+
+    [kit.edge.db.sql.conman]
+    [simpleui.launchpoint.migratus]
+    [simpleui.launchpoint.web.routes.ui]
     [kit.edge.utils.nrepl])
   (:gen-class))
 

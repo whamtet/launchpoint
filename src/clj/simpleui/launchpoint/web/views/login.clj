@@ -27,6 +27,8 @@
    (components/text (i18n "First name") "first-name" first-name :required)
    (components/text (i18n "Last name") "last-name" last-name :required)
    (components/email (i18n "Email") "email" email :required)
+   (when (= :duplicate-email problem)
+         (warning (i18n "Please choose another email")))
    (components/password (i18n "Password") "password" :required)
    (when (= :pw-quality problem)
          (warning (i18n "Password requires at least 8 letters and numbers")))
@@ -74,6 +76,6 @@
         "login" (prn 'xx email password)
         "register"
         (or-keyword
-         (controllers.login/register first-name last-name email password password2)
+         (controllers.login/register query-fn first-name last-name email password password2)
          (login-disp register first-name last-name email $))
         (login-disp register first-name last-name email nil)))
