@@ -4,6 +4,7 @@
    [hiccup.page :as p]
    [ring.util.http-response :as http-response]
    [simpleui.core :as simpleui]
+   [simpleui.launchpoint.env :refer [dev?]]
    [simpleui.launchpoint.i18n :refer [i18n]]
    [simpleui.launchpoint.web.resource-cache :as resource-cache]
    [simpleui.render :as render]))
@@ -18,13 +19,16 @@
       http-response/ok
       (http-response/content-type "text/html")))
 
+(defn- unminify [^String s]
+  (if dev?
+    (.replace s ".min" "")
+    s))
+
 (defn- htmx []
   [:script {:src
-            (if false ;(dev?)
-              "/htmx.js"
-              "https://unpkg.com/htmx.org@1.9.5/dist/htmx.min.js")}])
+            (unminify "https://unpkg.com/htmx.org@1.9.5/dist/htmx.min.js")}])
 
-(defn page-htmx [{:keys [css js google?]} & body]
+(defn page-htmx [{:keys [css js hyperscript?]} & body]
   (page
    [:head
     [:meta {:charset "UTF-8"}]
@@ -38,8 +42,8 @@
     [:script "htmx.config.defaultSwapStyle = 'outerHTML';"]
     (for [js js]
       [:script {:src js}])
-    (when google?
-          [:script {:src "https://accounts.google.com/gsi/client" :async true :defer true}])]))
+    (when hyperscript?
+          [:script {:src (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js")}])]))
 
 (defmacro defcomponent
   [name [req :as args] & body]

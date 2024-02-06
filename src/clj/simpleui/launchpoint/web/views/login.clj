@@ -3,6 +3,7 @@
       [simpleui.launchpoint.i18n :refer [i18n]]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
+      [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
       [simpleui.launchpoint.web.controllers.login :as controllers.login]))
 
 [:div.bg-clj-blue-light.text-gray-500]
@@ -41,8 +42,11 @@
 
 (defn- login-disp [register first-name last-name email problem]
   [:div {:hx-target "this"}
-   [:a.absolute.top-3.right-3 {:href ""}
+   [:a.absolute.top-3.left-3 {:href ""}
     [:img.w-24 {:src "/logo.svg"}]]
+   [:div.absolute.top-3.right-3
+    (dropdown/dropdown
+     "English" ["日本語"])]
    [:div.text-center.mt-6
     (components/h1 (i18n "SimpleUI Launchpoint"))]
    [:div {:class "mt-12

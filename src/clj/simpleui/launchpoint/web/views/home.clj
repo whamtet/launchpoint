@@ -12,7 +12,7 @@
    (fn [req]
      (let [req (assoc req :query-fn query-fn)]
        (page-htmx
-        {:css ["/output.css"]}
+        {:css ["/output.css"] :hyperscript? true}
         (if (-> req :session :id)
           (dashboard/dashboard req)
           (login/login req)))))))
