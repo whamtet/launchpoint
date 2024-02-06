@@ -13,12 +13,16 @@
   (refresh-session
    (apply assoc session keys)))
 
+(defn- dissoc-session [session & keys]
+  (refresh-session
+   (apply dissoc session keys)))
+
 (def pw-regex #"(?=.*[A-Za-z])(?=.*\d).{8,}")
 
 (defn duplicate-email? [e]
   (-> e str (.contains "(UNIQUE constraint failed: user.email)")))
 
-(defn register [query-fn
+(defn register [{:keys [query-fn session]}
                 first-name
                 last-name
                 email
@@ -29,14 +33,29 @@
    (not (re-find pw-regex password)) :pw-quality
    :else
    (try
-     (query-fn
-      :insert-user
-      {:first-name first-name
-       :last-name last-name
-       :email email
-       :password (password/encrypt password)})
-     nil
+     (->> password
+          password/encrypt
+          (hash-map :first-name first-name
+                    :last-name last-name
+                    :email email
+                    :password)
+          (query-fn :insert-user)
+          first
+          :rowid
+          (assoc-session session :id))
      (catch clojure.lang.ExceptionInfo e
        (if (duplicate-email? e)
          :duplicate-email
          (throw e))))))
+
+(defn logout [session]
+  (dissoc-session session :id))
+
+(defn login [{:keys [query-fn session]}
+             email
+             password]
+  (if-let [record (query-fn :get-user {:email email})]
+    (if (->> record :password (password/check password))
+      (assoc-session session :id (:rowid record))
+      :unknown)
+    :unknown))

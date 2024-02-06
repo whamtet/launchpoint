@@ -12,14 +12,16 @@
          " bg-clj-blue-light"
          " text-gray-500")))
 
-(def login-form
-  [:form.py-3 {:hx-post "login:login"}
-   (components/email (i18n "Email") "email")
-   (components/password (i18n "Password") "password")
-   (components/submit (i18n "Login"))])
-
 (defn- warning [msg]
   [:div.m-1 (components/warning msg)])
+
+(defn login-form [email problem]
+  [:form.py-3 {:hx-post "login:login"}
+   (components/email (i18n "Email") "email" email)
+   (components/password (i18n "Password") "password")
+   (when (= :unknown problem)
+         (warning (i18n "Unknown account")))
+   (components/submit (i18n "Login"))])
 
 (defn- registration-form [first-name last-name email problem]
   [:form.py-3 {:hx-post "login:register"}
@@ -58,7 +60,7 @@
       (i18n "Register")]]
     (if register
       (registration-form first-name last-name email problem)
-      login-form)]])
+      (login-form email problem))]])
 
 (defmacro or-keyword [test alternative]
   `(let [~'$ ~test]
@@ -73,9 +75,12 @@
                                 password2
                                 command]
   (case command
-        "login" (prn 'xx email password)
+        "login"
+        (or-keyword
+         (controllers.login/login req email password)
+         (login-disp register first-name last-name email $))
         "register"
         (or-keyword
-         (controllers.login/register query-fn first-name last-name email password password2)
+         (controllers.login/register req first-name last-name email password password2)
          (login-disp register first-name last-name email $))
         (login-disp register first-name last-name email nil)))

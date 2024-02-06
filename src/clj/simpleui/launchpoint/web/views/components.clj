@@ -40,6 +40,12 @@
             :class "bg-clj-blue p-1.5 rounded-lg text-white w-24"
             :value label}]])
 
+(defn button [label]
+  [:div.p-1
+   [:button {:type "button"
+             :class "bg-clj-blue p-1.5 rounded-lg text-white w-24"}
+    label]])
+
 (defn warning [msg]
   [:span {:class "bg-red-600 p-2 rounded-lg text-white"} msg])
 
