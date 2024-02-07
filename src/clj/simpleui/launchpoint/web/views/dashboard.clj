@@ -7,6 +7,13 @@
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]))
 
+(defn main-dropdown [first_name]
+  [:div.absolute.top-1.right-1
+   (dropdown/dropdown
+    first_name
+    [[:div.p-1 {:hx-post "dashboard:logout"}
+      (i18n "Logout")]])])
+
 (defcomponent ^:endpoint dashboard [req command]
   (case command
         "logout" (login/logout session)
@@ -18,11 +25,7 @@
                      :type "text"
                      :placeholder "Search..."}]]
            ;; dropdown
-           [:div.absolute.top-1.right-1
-            (dropdown/dropdown
-              first_name
-              [[:div.p-1 {:hx-post "dashboard:logout"}
-                (i18n "Logout")]])]
+           (main-dropdown first_name)
            ;; profile panel
            [:div.w-96.border.rounded-lg.absolute.top-20.left-10.p-1.text-gray-500
             [:a {:href "/profile"} "Create profile..."]]

@@ -51,3 +51,11 @@
 
 (defn h1 [& contents]
   [:h1.text-3xl contents])
+
+(defn modal [width & contents]
+  [:div#modal {:class "fixed left-0 top-0 w-full h-full
+  pt-3"
+               :style {:background-color "rgba(0,0,0,0.4)"}
+               :_ "on click add .hidden"}
+   [:div {:class (str "mx-auto border rounded-lg bg-white " width)}
+    contents]])

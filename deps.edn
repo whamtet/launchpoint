@@ -2,6 +2,7 @@
            "resources"]
 
  :deps    {org.clojure/clojure {:mvn/version "1.11.1"}
+           org.clj-commons/digest {:mvn/version "1.4.100"}
 
            crypto-password/crypto-password {:mvn/version "0.3.0"}
 
