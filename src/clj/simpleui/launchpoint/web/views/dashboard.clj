@@ -2,7 +2,6 @@
     (:require
       [simpleui.launchpoint.i18n :refer [i18n]]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
-      [simpleui.launchpoint.web.controllers.login :as login]
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]))
@@ -11,12 +10,11 @@
   [:div.absolute.top-1.right-1
    (dropdown/dropdown
     first_name
-    [[:div.p-1 {:hx-post "dashboard:logout"}
+    [[:div.p-1 {:hx-post "/api/logout"}
       (i18n "Logout")]])])
 
 (defcomponent ^:endpoint dashboard [req command]
   (case command
-        "logout" (login/logout session)
         (let [{:keys [first_name]} (user/get-user req)]
           [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
            ;; search

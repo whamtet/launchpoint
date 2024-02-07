@@ -1,6 +1,7 @@
 (ns simpleui.launchpoint.web.routes.api
   (:require
     [simpleui.launchpoint.web.controllers.health :as health]
+    [simpleui.launchpoint.web.controllers.login :as login]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
     [integrant.core :as ig]
@@ -37,6 +38,9 @@
     {:get {:no-doc  true
            :swagger {:info {:title "simpleui.launchpoint API"}}
            :handler (swagger/create-swagger-handler)}}]
+   ["/logout"
+    (fn [{:keys [session]}]
+      (login/logout session))]
    ["/health"
     {:get health/healthcheck!}]])
 
