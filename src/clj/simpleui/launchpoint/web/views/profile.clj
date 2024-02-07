@@ -2,6 +2,7 @@
     (:require
       [clj-commons.digest :as digest]
       [simpleui.core :as simpleui]
+      [simpleui.launchpoint.i18n :refer [i18n]]
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.htmx :refer [page-htmx defcomponent]]
@@ -21,13 +22,42 @@
     (components/modal "w-1/2"
                       [:div.flex
                        [:div.m-2.border.rounded-lg.inline-block.overflow-hidden
-                        [:img {:src (gravatar email)}]]])
+                        [:img {:src (gravatar email)}]]
+                       [:div.p-1
+                        (components/p (i18n "Profile pics are managed by Gravatar.  Updates take a few minutes to show up."))
+                        [:a {:href "https://gravatar.com/profile/avatars/"
+                             :target "_blank"
+                             :_ "on click add .hidden to #modal"}
+                         (components/button (i18n "Edit"))]]])
     [:a {:href ""
-         :hx-post "pic"
+         :hx-get "pic"
          :hx-target "#modal"
          :hx-vals {:email email}}
      [:div.m-2.border.rounded-lg.inline-block.overflow-hidden
       [:img {:src (gravatar email)}]]]))
+
+(defcomponent ^:endpoint names [req first_name last_name command]
+  (when (= "save" command)
+        (user/update-names req first_name last_name))
+  (case command
+        "edit"
+        [:form {:hx-post "names:save"}
+         [:input {:class "w-24"
+                  :name "first_name"
+                  :value first_name
+                  :required true}]
+         [:input {:class "w-24"
+                  :name "last_name"
+                  :value last_name
+                  :required true}]
+         (components/submit-inline (i18n "Save"))]
+        [:div {:hx-target "this"}
+         [:span.text-2xl first_name " " last_name]
+         [:a.ml-2 {:href "#"
+                   :hx-get "names:edit"
+                   :hx-vals {:first_name first_name
+                             :last_name last_name}}
+          (components/button (i18n "Edit"))]]))
 
 (defcomponent ^:endpoint profile [req command]
   (case command
@@ -37,7 +67,8 @@
            (dashboard/main-dropdown first_name)
            [:div {:class "min-h-screen w-2/3 mx-auto"}
             [:div#modal]
-            (pic req email)]])))
+            (pic req email)
+            (names req first_name last_name nil)]])))
 
 (defn ui-routes [{:keys [query-fn]}]
   (simpleui/make-routes

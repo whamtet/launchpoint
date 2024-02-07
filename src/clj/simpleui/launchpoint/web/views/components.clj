@@ -40,8 +40,14 @@
             :class "bg-clj-blue p-1.5 rounded-lg text-white w-24"
             :value label}]])
 
+(defn submit-inline [label]
+  [:span.p-1
+   [:input {:type "submit"
+            :class "bg-clj-blue p-1.5 rounded-lg text-white w-24"
+            :value label}]])
+
 (defn button [label]
-  [:div.p-1
+  [:span.p-1
    [:button {:type "button"
              :class "bg-clj-blue p-1.5 rounded-lg text-white w-24"}
     label]])
@@ -52,10 +58,16 @@
 (defn h1 [& contents]
   [:h1.text-3xl contents])
 
+(defn h2 [& contents]
+  [:h2.text-2xl contents])
+
 (defn modal [width & contents]
   [:div#modal {:class "fixed left-0 top-0 w-full h-full
   pt-3"
                :style {:background-color "rgba(0,0,0,0.4)"}
-               :_ "on click add .hidden"}
+               :_ "on click if target.id === 'modal' add .hidden"}
    [:div {:class (str "mx-auto border rounded-lg bg-white " width)}
     contents]])
+
+(defn p [& contents]
+  [:p.m-3 contents])

@@ -14,3 +14,8 @@ select * from user where id = :id
 insert into cv (user_id, cv)
 values (:id, :cv)
 on conflict(user_id) do update set cv = :cv
+
+-- :name update-names :execute
+update user
+set first_name = :first_name, last_name = :last_name
+where id = :id
