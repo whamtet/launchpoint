@@ -11,7 +11,7 @@
   (case command
         "logout" (login/logout session)
         (let [{:keys [first_name]} (user/get-user req)]
-          [:div.h-screen.p-1 {:_ "on click add .hidden to .drop"}
+          [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
            ;; search
            [:div {:class "w-1/2 mx-auto"}
             [:input {:class "w-full border rounded-full p-2"

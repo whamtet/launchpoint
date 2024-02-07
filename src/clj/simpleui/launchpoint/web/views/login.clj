@@ -41,10 +41,10 @@
    (components/submit (i18n "Register"))])
 
 (defn- login-disp [register first-name last-name email problem]
-  [:div.h-screen {:hx-target "this" :_ "on click add .hidden to .drop"}
+  [:div.pt-6.pb-12.relative.min-h-screen {:hx-target "this" :_ "on click add .hidden to .drop"}
    [:a.absolute.top-3.left-3 {:href ""}
     [:img.w-24 {:src "/logo.svg"}]]
-   [:div.text-center.mt-6
+   [:div.text-center
     (components/h1 (i18n "SimpleUI Launchpoint"))]
    [:div {:class "mt-12
    mx-auto w-1/2
