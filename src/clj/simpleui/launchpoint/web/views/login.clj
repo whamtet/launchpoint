@@ -41,8 +41,7 @@
    (components/submit (i18n "Register"))])
 
 (defn- login-disp [register first-name last-name email problem]
-  [:div.h-screen {:hx-target "this"
-                  :_ "on click add .hidden to .drop"}
+  [:div.h-screen {:hx-target "this" :_ "on click add .hidden to .drop"}
    [:a.absolute.top-3.left-3 {:href ""}
     [:img.w-24 {:src "/logo.svg"}]]
    [:div.text-center.mt-6

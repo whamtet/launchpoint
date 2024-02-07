@@ -54,7 +54,7 @@
 (defn login [{:keys [query-fn session]}
              email
              password]
-  (if-let [record (query-fn :get-user {:email email})]
+  (if-let [record (query-fn :get-user-by-email {:email email})]
     (if (->> record :password (password/check password))
       (assoc-session session :id (:rowid record))
       :unknown)

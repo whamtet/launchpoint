@@ -12,9 +12,11 @@
 (defn dropdown [label other-items]
   [:div.p-1
    (button label)
-   [:div {:class "drop hidden rounded-lg border p-1.5 m-1 hover:bg-slate-100"}
+   [:div {:class "drop hidden rounded-lg border p-1 m-1"}
     (for [item other-items]
-      [:a {:href ""} item])]])
+      [:a {:href ""}
+       [:div {:class "hover:bg-slate-100"}
+        item]])]])
 
 (defn- button-up [label]
   [:div
