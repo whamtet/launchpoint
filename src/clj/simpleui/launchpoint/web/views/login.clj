@@ -41,12 +41,10 @@
    (components/submit (i18n "Register"))])
 
 (defn- login-disp [register first-name last-name email problem]
-  [:div {:hx-target "this"}
+  [:div.h-screen {:hx-target "this"
+                  :_ "on click add .hidden to .drop"}
    [:a.absolute.top-3.left-3 {:href ""}
     [:img.w-24 {:src "/logo.svg"}]]
-   [:div.absolute.top-3.right-3
-    (dropdown/dropdown
-     "English" ["日本語"])]
    [:div.text-center.mt-6
     (components/h1 (i18n "SimpleUI Launchpoint"))]
    [:div {:class "mt-12
@@ -64,7 +62,11 @@
       (i18n "Register")]]
     (if register
       (registration-form first-name last-name email problem)
-      (login-form email problem))]])
+      (login-form email problem))]
+   ;; language selector
+   [:div.absolute.bottom-0.flex.w-full.justify-center
+    (dropdown/dropup
+     "English" ["日本語"])]])
 
 (defmacro or-keyword [test alternative]
   `(let [~'$ ~test]
