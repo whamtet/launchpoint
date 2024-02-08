@@ -31,3 +31,16 @@
 (defn download [json]
   (let [data (-> json slurp json/read-str)]
     (dorun (pmap download1 data))))
+
+(defn clean [[url company]]
+  (let [filename (-> url (.split "\\?") first (.split "/") last)]
+    (when-not (ignore? filename)
+              [company filename])))
+
+#_
+(->> files
+     (mapcat #(-> % slurp json/read-str))
+     (keep clean)
+     (into {})
+     pr-str
+     (spit "resources/companies.edn"))
