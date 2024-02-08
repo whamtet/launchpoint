@@ -75,6 +75,8 @@
   (let [{:keys [first_name last_name email]} (user/get-user req)
         {:keys [description] :as cv} (profile/get-cv req)]
     [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
+     [:a.absolute.top-3.left-3 {:href "/"}
+      [:img.w-24 {:src "/logo.svg"}]]
      (dashboard/main-dropdown first_name)
      [:div {:class "min-h-screen w-2/3 mx-auto"}
       [:div#modal]

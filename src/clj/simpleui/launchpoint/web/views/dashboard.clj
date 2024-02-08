@@ -17,6 +17,8 @@
   (case command
         (let [{:keys [first_name]} (user/get-user req)]
           [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
+           [:a.absolute.top-3.left-3 {:href ""}
+            [:img.w-24 {:src "/logo.svg"}]]
            ;; search
            [:div {:class "w-1/2 mx-auto"}
             [:input {:class "w-full border rounded-full p-2"
