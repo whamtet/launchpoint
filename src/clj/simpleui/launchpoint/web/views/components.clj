@@ -61,6 +61,9 @@
 (defn h2 [& contents]
   [:h2.text-2xl contents])
 
+(defn h3 [& contents]
+  [:h3.text-xl contents])
+
 (defn modal [width & contents]
   [:div#modal {:class "fixed left-0 top-0 w-full h-full
   pt-3"

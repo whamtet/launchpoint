@@ -10,6 +10,9 @@ select id, password from user where email = :email
 -- :name get-user :query :one
 select * from user where id = :id
 
+-- :name get-cv :query :one
+select * from cv where user_id = :id
+
 -- :name upsert-cv :execute
 insert into cv (user_id, cv)
 values (:id, :cv)
