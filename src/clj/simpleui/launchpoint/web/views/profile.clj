@@ -29,11 +29,15 @@
                              :target "_blank"
                              :_ "on click add .hidden to #modal"}
                          (components/button (i18n "Edit"))]]])
-    [:a {:href ""
-         :hx-get "pic"
-         :hx-target "#modal"
-         :hx-vals {:email email}}
-     [:div.m-2.border.rounded-lg.inline-block.overflow-hidden
+    [:a#pic {:href ""
+             :hx-get "pic"
+             :hx-target "#modal"
+             :hx-vals {:email email}}
+     [:div.m-2.border.rounded-lg.inline-block.overflow-hidden.relative
+      ;; hoverable
+      [:div {:class "absolute left-0 top-0 w-64 h-64
+      hidden justify-center items-center"}
+       [:div.text-white.text-4xl (i18n "Edit")]]
       [:img {:src (gravatar email)}]]]))
 
 (defcomponent ^:endpoint names [req first_name last_name command]

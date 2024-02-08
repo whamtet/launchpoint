@@ -25,3 +25,8 @@
     border-bottom: 0.3em solid;
     border-left: 0.3em solid transparent;
 }
+
+a#pic:hover div.absolute {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.3);
+}
