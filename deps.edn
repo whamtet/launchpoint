@@ -29,7 +29,7 @@
  io.github.kit-clj/kit-sql-migratus {:mvn/version "1.0.4"}
  org.xerial/sqlite-jdbc {:mvn/version "3.36.0.3"}
  simpleui/simpleui {:git/url "https://github.com/whamtet/simpleui",
-                    :git/sha "a107d7a8a69755dae6cd9954992614a86504c257"}
+                    :git/sha "8e931f31c04fdeec090c0ea701ffb4683c052cbd"}
  io.github.kit-clj/kit-nrepl {:mvn/version "1.0.1"}}
  :aliases {:build {:deps {io.github.clojure/tools.build {:git/sha "24f2894"
                                                          :git/tag "v0.9.5" :git/url "https://github.com/clojure/tools.build.git"}}

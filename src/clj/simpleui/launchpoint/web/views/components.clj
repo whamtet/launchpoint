@@ -66,7 +66,7 @@
 
 (defn modal [width & contents]
   [:div#modal {:class "fixed left-0 top-0 w-full h-full
-  pt-3 z-10"
+  pt-6 z-10"
                :style {:background-color "rgba(0,0,0,0.4)"}
                :_ "on click if target.id === 'modal' add .hidden"}
    [:div {:class (str "mx-auto border rounded-lg bg-white " width)}

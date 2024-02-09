@@ -8,6 +8,7 @@
       [simpleui.launchpoint.web.htmx :refer [page-htmx defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.dashboard :as dashboard]
+      [simpleui.launchpoint.web.views.profile.history :as profile.history]
       [simpleui.response :as response]))
 
 (defn- gravatar [^String email]
@@ -68,12 +69,17 @@
     (do (profile/update-description req description) nil)
     [:div
      (components/h3 (i18n "Description"))
-     [:textarea.border.rounded-lg.w-full.my-3.p-3
-      {:hx-post "description-section"
+     [:textarea
+      {:class "border rounded-lg my-3 p-3 w-3/4"
+       :hx-post "description-section"
        :hx-trigger "blur,keyup changed delay:0.5s"
-       :rows 6
+       :rows 5
        :name "description"
        :placeholder (i18n "Describe yourself...")} description]]))
+
+(defcomponent ^:endpoint new-job [req]
+  (if true #_top-level?
+    (profile.history/job-edit-modal req (i18n "New Job") nil)))
 
 (defcomponent ^:endpoint profile [req]
   (let [{:keys [first_name last_name email]} (user/get-user req)
@@ -83,11 +89,13 @@
       [:img.w-24 {:src "/logo.svg"}]]
      (dashboard/main-dropdown first_name)
      [:div {:class "min-h-screen w-2/3 mx-auto"}
-      [:div#modal]
+      ;[:div#modal]
       (pic req email)
       (names req first_name last_name nil)
       [:hr.w-96.my-6.border]
       (description-section req description)
+      (components/h3 (i18n "Work History"))
+      (new-job req)
       ]]))
 
 (defn ui-routes [{:keys [query-fn]}]
