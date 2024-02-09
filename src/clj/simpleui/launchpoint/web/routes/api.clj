@@ -1,5 +1,6 @@
 (ns simpleui.launchpoint.web.routes.api
   (:require
+    [clojure.java.io :as io]
     [simpleui.launchpoint.web.controllers.health :as health]
     [simpleui.launchpoint.web.controllers.login :as login]
     [simpleui.launchpoint.web.middleware.exception :as exception]
@@ -41,6 +42,12 @@
    ["/logout"
     (fn [{:keys [session]}]
       (login/logout session))]
+   ["/company/:src"
+    (fn [{:keys [session path-params]}]
+      (-> session :id assert)
+      {:status 200
+       :headers {}
+       :body (->> path-params :src (str "logos/") io/input-stream)})]
    ["/health"
     {:get health/healthcheck!}]])
 

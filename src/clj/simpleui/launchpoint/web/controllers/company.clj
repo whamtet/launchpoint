@@ -12,7 +12,12 @@
        (into {})))
 
 (defn search [q]
-  (->> companies
-       (keep (fn [[company info]]
-               (when (.contains company q) info)))
-       (keep 5)))
+  (let [q (.toLowerCase q)
+        {starters true
+         others false}
+        (->> companies
+             (filter (fn [[company]] (.contains company q)))
+             (group-by (fn [[company]] (.startsWith company q))))]
+    (->> (concat starters others)
+         (take 5)
+         (map second))))
