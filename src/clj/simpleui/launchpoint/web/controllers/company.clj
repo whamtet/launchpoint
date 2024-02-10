@@ -20,4 +20,5 @@
              (group-by (fn [[company]] (.startsWith company q))))]
     (->> (concat starters others)
          (take 5)
-         (map second))))
+         (map second)
+         not-empty)))

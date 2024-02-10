@@ -79,7 +79,7 @@
 
 (defcomponent ^:endpoint new-job [req]
   (if true #_top-level?
-    (profile.history/job-edit-modal req (i18n "New Job") nil)))
+    (simpleui/apply-component profile.history/job-edit-modal req (i18n "New Job"))))
 
 (defcomponent ^:endpoint profile [req]
   (let [{:keys [first_name last_name email]} (user/get-user req)

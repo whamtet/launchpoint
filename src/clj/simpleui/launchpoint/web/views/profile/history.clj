@@ -1,28 +1,26 @@
 (ns simpleui.launchpoint.web.views.profile.history
     (:require
-      [simpleui.launchpoint.i18n :refer [i18n]]
+      [simpleui.launchpoint.i18n :refer [i18n i18ns]]
       [simpleui.launchpoint.web.controllers.company :as company]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]))
 
-(def search-hider
-  [:div#hide-company-search.hidden.h-1
-   {:hx-post "search-results"
-    :hx-target "#search-results"}])
 (def hide-search-results
-  "if (event.target.id !== 'company-search-box') {document.querySelector('#hide-company-search').click();}")
+  "if (event.target.id !== 'company-search-box') {htmx.ajax('GET', 'search-results', '#search-results');}")
 
 (defcomponent ^:endpoint search-results [req q]
   (if (>= (count q) 3)
-    [:div#search-results.p-1.border.rounded-lg
-     (for [[company src] (company/search q)]
-       [:a {:href ""
-            :hx-post "company-search"
-            :hx-vals {:q company}
-            :hx-target "#company-search"}
-        [:div {:class "flex hover:bg-slate-100 p-1"}
-         [:img.w-3.mx-1 {:src (str "/api/company/" src)}]
-         [:span company]]])]
+    (if-let [companies (company/search q)]
+      [:div#search-results.p-1.border.rounded-lg
+       (for [[company src] companies]
+         [:a {:href ""
+              :hx-post "company-search"
+              :hx-vals {:q company}
+              :hx-target "#company-search"}
+          [:div {:class "flex h-9 items-center hover:bg-slate-100 p-1"}
+           [:img.h-full.ml-1.mr-2 {:src (str "/api/company/" src)}]
+           [:span company]]])]
+      [:div#search-results])
     [:div#search-results]))
 
 (defcomponent ^:endpoint company-search [req q]
@@ -41,19 +39,54 @@
       :autocomplete "off"}]
     (search-results req nil)]])
 
+(defn months [] (i18ns
+                 "January"
+                 "February"
+                 "March"
+                 "April"
+                 "May"
+                 "June"
+                 "July"
+                 "August"
+                 "September"
+                 "October"
+                 "November"
+                 "December"))
+
+(defn month-select [label name value]
+  [:div
+   [:div.p-1 label [:span.text-red-500 " *"]]
+   [:div.p-1
+    [:select {:class "p-1.5 w-full" :name name}
+     (map-indexed
+      (fn [i month]
+        [:option {:value i
+                  :selected (= month value)}
+         month])
+      (months))]]])
+
 [:div {:class "w-2/3"}]
-(defcomponent job-edit-modal [req modal-title cv] ;; this component is never-reevaluated
-  (let [{:keys [title
-                company
-                from-year from-month
-                to-year to-month]} cv]
-    (components/modal "w-2/3"
-                      [:div#job-edit.p-3
-                       {:onclick hide-search-results}
-                       search-hider
-                       [:div.my-2 (components/h2 modal-title)]
-                       [:div {:class "my-1 w-1/2"}
-                        (components/text
-                         (i18n "Job Title") "title" title :asterisk)]
-                       [:div {:class "my-1 w-1/2"}
-                        (company-search req company)]])))
+(defcomponent job-edit-modal [req
+                              modal-title
+                              title company
+                              ^:long from-year ^:long from-month
+                              ^:long to-year ^:long to-month
+                              description]
+  (components/modal "w-2/3"
+                    [:form.p-3 {:onclick hide-search-results}
+                     [:div.my-2 (components/h2 modal-title)]
+                     ;; job title
+                     [:div {:class "my-1 w-1/2"}
+                      (components/text
+                       (i18n "Job Title") "title" title :asterisk)]
+                     ;; company
+                     [:div {:class "my-1 w-1/2"}
+                      (company-search req company)]
+                     ;; from
+                     [:div.flex
+                      [:div {:class "w-1/2"}
+                       (components/number
+                        (i18n "From Year") "from-year" from-year :asterisk)]
+                      [:div {:class "w-1/2"}
+                       (month-select (i18n "From Month") "from-month" from-month)]]
+                     ]))

@@ -21,6 +21,7 @@
 
 (def text (partial input "text"))
 (def email (partial input "email"))
+(def number (partial input "number"))
 
 (defn password
   ([label name]
