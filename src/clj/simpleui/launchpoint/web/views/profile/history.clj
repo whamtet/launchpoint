@@ -61,14 +61,34 @@
      (map-indexed
       (fn [i month]
         [:option {:value i
-                  :selected (= month value)}
+                  :selected (= i value)}
          month])
       (months))]]])
+
+(defn present-checkbox [present?]
+  [:div.flex.p-1
+   [:input {:class "m-1"
+            :type "checkbox"
+            :name "present"
+            :checked present?
+            :hx-get "job-to"
+            :hx-target "#job-to"
+            :hx-include "#job-to *"}]
+   [:div.m-1.ml-3 (i18n "I am currently in this role")]])
+
+(defcomponent ^:endpoint job-to [req ^:long to-year ^:long to-month ^:boolean present]
+  [:fieldset#job-to.flex {:disabled present}
+   [:div {:class "w-1/2"}
+    (components/number
+     (i18n "To Year") "to-year" to-year :asterisk)]
+   [:div {:class "w-1/2"}
+    (month-select (i18n "To Month") "to-month" to-month)]])
 
 [:div {:class "w-2/3"}]
 (defcomponent job-edit-modal [req
                               modal-title
                               title company
+                              ^:boolean present
                               ^:long from-year ^:long from-month
                               ^:long to-year ^:long to-month
                               description]
@@ -82,6 +102,7 @@
                      ;; company
                      [:div {:class "my-1 w-1/2"}
                       (company-search req company)]
+                     (present-checkbox present)
                      ;; from
                      [:div.flex
                       [:div {:class "w-1/2"}
@@ -89,4 +110,5 @@
                         (i18n "From Year") "from-year" from-year :asterisk)]
                       [:div {:class "w-1/2"}
                        (month-select (i18n "From Month") "from-month" from-month)]]
+                     (job-to req to-year to-month present)
                      ]))
