@@ -77,10 +77,6 @@
        :name "description"
        :placeholder (i18n "Describe yourself...")} description]]))
 
-(defcomponent ^:endpoint new-job [req]
-  (if true #_top-level?
-    (simpleui/apply-component profile.history/job-edit-modal req (i18n "New Job"))))
-
 (defcomponent ^:endpoint profile [req]
   (let [{:keys [first_name last_name email]} (user/get-user req)
         {:keys [description] :as cv} (profile/get-cv req)]
@@ -89,13 +85,13 @@
       [:img.w-24 {:src "/logo.svg"}]]
      (dashboard/main-dropdown first_name)
      [:div {:class "min-h-screen w-2/3 mx-auto"}
-      ;[:div#modal]
+      [:div#modal]
       (pic req email)
       (names req first_name last_name nil)
       [:hr.w-96.my-6.border]
       (description-section req description)
       (components/h3 (i18n "Work History"))
-      (new-job req)
+      (profile.history/new-job req)
       ]]))
 
 (defn ui-routes [{:keys [query-fn]}]

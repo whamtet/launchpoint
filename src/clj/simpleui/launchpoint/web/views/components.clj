@@ -75,7 +75,7 @@
                :style {:background-color "rgba(0,0,0,0.4)"}
                :_ "on click if target.id === 'modal' add .hidden"}
    [:div {:class (str "mx-auto border rounded-lg bg-white overflow-y-auto " width)
-          :style {:height "94vh"
+          :style {:max-height "94vh"
                   :margin-top "3vh"
                   :margin-bottom "3vh"}}
     contents]])

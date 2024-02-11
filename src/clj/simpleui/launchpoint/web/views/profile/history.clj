@@ -1,5 +1,6 @@
 (ns simpleui.launchpoint.web.views.profile.history
     (:require
+      [simpleui.core :as simpleui]
       [simpleui.launchpoint.i18n :refer [i18n i18ns]]
       [simpleui.launchpoint.web.controllers.company :as company]
       [simpleui.launchpoint.web.controllers.profile :as profile]
@@ -17,7 +18,7 @@
        (for [[company src] companies]
          [:a {:href ""
               :hx-post "company-search"
-              :hx-vals {:company company}
+              :hx-vals {:company company :src src}
               :hx-target "#company-search"}
           [:div {:class "flex h-9 items-center hover:bg-slate-100 p-1"}
            [:img.h-full.ml-1.mr-2 {:src (str "/api/company/" src)}]
@@ -25,10 +26,11 @@
       [:div#search-results])
     [:div#search-results]))
 
-(defcomponent ^:endpoint company-search [req company]
+(defcomponent ^:endpoint company-search [req company src]
   [:div#company-search
    [:div.p-1 (i18n "Company") [:span.text-red-500 " *"]]
    [:div.p-1
+    [:input {:type "hidden" :name "src" :value src}]
     [:input#company-search-box.w-full.p-1
      {:type "text"
       :name "company"
@@ -101,7 +103,7 @@
 [:div {:class "w-2/3"}]
 (defcomponent ^:endpoint job-edit-modal [req
                                          modal-title
-                                         title company
+                                         title company src
                                          ^:boolean present
                                          ^:long from-year ^:long from-month
                                          ^:long-option to-year ^:long-option to-month
@@ -111,7 +113,7 @@
         "save"
         (do
           (profile/add-job req (util/zipm title
-                                          company
+                                          company src
                                           present
                                           from-year from-month
                                           to-year to-month
@@ -128,7 +130,7 @@
                              (i18n "Job Title") "title" title :asterisk)]
                            ;; company
                            [:div {:class "my-1 w-1/2"}
-                            (company-search req company)]
+                            (company-search req company src)]
                            ;; present
                            (present-checkbox present)
                            ;; from
@@ -148,3 +150,29 @@
                              :placeholder (i18n "Describe your role...")} description]
                            (components/submit (i18n "Save"))
                            ])))
+
+(defcomponent ^:endpoint new-job [req]
+  (if top-level?
+    (simpleui/apply-component job-edit-modal req (i18n "New Job"))
+    [:div.my-3 {:hx-get "new-job"
+                :hx-target "#modal"}
+     (components/button (i18n "Add Job"))]))
+
+(defcomponent ^:endpoint edit-job [req ^:edn job]
+  (if top-level?
+    (simpleui/apply-component-map job-edit-modal job req (i18n "Edit Job"))
+    [:span {:hx-get "new-job"
+            :hx-target "#modal"
+            :hx-vals {:job (pr-str job)}}
+     (components/button (i18n "Edit Job"))]))
+
+(defcomponent ^:endpoint work-history [req jobs ^:long i]
+  [:div.p-3
+   (map-indexed
+     (fn [i {:keys [title
+                    company src
+                    present
+                    from-year from-month
+                    to-year to-month
+                    description] :as job}])
+     jobs)])
