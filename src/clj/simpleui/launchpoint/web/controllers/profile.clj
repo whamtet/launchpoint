@@ -15,3 +15,8 @@
 (defn update-description [req description]
   (update-cv req assoc :description description))
 
+(defn- conjv [a b]
+  (conj (or a []) b))
+
+(defn add-job [req job]
+  (update-cv req update :jobs conjv job))

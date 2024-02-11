@@ -1,7 +1,7 @@
 (ns simpleui.launchpoint.web.views.components)
 
 (defn input
-  ([type {:keys [label name value autocomplete asterisk]}]
+  ([type {:keys [label name value autocomplete asterisk disabled required]}]
    [:div
     [:div.p-1 label (when asterisk [:span.text-red-500 " *"])]
     [:div.p-1
@@ -10,14 +10,17 @@
        :name name
        :value value
        :autocomplete autocomplete
-       :required true
+       :disabled disabled
+       :required required
        :placeholder label}]]])
   ([type label name]
-   (input type {:label label :name name}))
+   (input type {:label label :name name :required true}))
   ([type label name value]
-   (input type {:label label :name name :value value}))
+   (input type {:label label :name name :value value :required true}))
   ([type label name value asterisk]
-   (input type {:label label :name name :value value :asterisk asterisk})))
+   (input type {:label label :name name :value value :asterisk asterisk :required true}))
+  ([type label name value asterisk disabled]
+   (input type {:label label :name name :value value :asterisk asterisk :disabled disabled :required true})))
 
 (def text (partial input "text"))
 (def email (partial input "email"))
@@ -30,7 +33,8 @@
    (input "password" {:label label
                       :name name
                       :asterisk asterisk
-                      :autocomplete "off"})))
+                      :autocomplete "off"
+                      :required true})))
 
 (defn hidden [name value]
   [:input {:type "hidden" :name name :value value}])
@@ -67,10 +71,13 @@
 
 (defn modal [width & contents]
   [:div#modal {:class "fixed left-0 top-0 w-full h-full
-  pt-6 z-10"
+  z-10"
                :style {:background-color "rgba(0,0,0,0.4)"}
                :_ "on click if target.id === 'modal' add .hidden"}
-   [:div {:class (str "mx-auto border rounded-lg bg-white " width)}
+   [:div {:class (str "mx-auto border rounded-lg bg-white overflow-y-auto " width)
+          :style {:height "94vh"
+                  :margin-top "3vh"
+                  :margin-bottom "3vh"}}
     contents]])
 
 (defn p [& contents]
