@@ -3,6 +3,7 @@
     [clojure.java.io :as io]
     [simpleui.launchpoint.web.controllers.health :as health]
     [simpleui.launchpoint.web.controllers.login :as login]
+    [simpleui.launchpoint.web.controllers.pdf :as pdf]
     [simpleui.launchpoint.web.htmx :refer [page-simple]]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
@@ -54,6 +55,12 @@
     (fn [req]
       (page-simple {:css ["/output.css"]}
                    (profile-pdf (assoc req :query-fn query-fn))))]
+   ["/profile/pdf"
+    (fn [{:keys [session headers]}]
+      (assert (:id session))
+      {:status 200
+       :headers {"Content-Type" "application/pdf"}
+       :body (-> "cookie" headers pdf/pdf-profile)})]
    ["/health"
     {:get health/healthcheck!}]])
 
