@@ -27,7 +27,15 @@
   (if (company/company-match? src company)
     job
     (dissoc job :src)))
-(defn add-job [req job]
-  (let [job-value (date-value job)
+
+(defn- add-job_ [jobs i job]
+  (let [jobs (if i (util/remove-i jobs i) jobs)
+        job-value (date-value job)
         inserter #(< job-value (date-value %))]
-  (update-cv req update :jobs #(util/insert-with inserter % (clean-job job)))))
+    (util/insert-with inserter jobs (clean-job job))))
+
+(defn add-job [req i job]
+  (update-cv req update :jobs add-job_ i job))
+
+(defn remove-job [req i]
+  (update-cv req update :jobs util/remove-i i))

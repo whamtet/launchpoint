@@ -6,7 +6,8 @@
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
-      [simpleui.launchpoint.util :as util]))
+      [simpleui.launchpoint.util :as util]
+      [simpleui.response :as response]))
 
 (def hide-search-results
   "if (event.target.id !== 'company-search-box') {htmx.ajax('GET', 'search-results', '#search-results');}")
@@ -102,7 +103,7 @@
 
 [:div {:class "w-2/3"}]
 (defcomponent ^:endpoint job-edit-modal [req
-                                         modal-title
+                                         ^:long-option i
                                          title company src
                                          ^:boolean present
                                          ^:long from-year ^:long from-month
@@ -112,18 +113,20 @@
   (case command
         "save"
         (do
-          (profile/add-job req (util/zipm title
-                                          company src
-                                          present
-                                          from-year from-month
-                                          to-year to-month
-                                          description))
-          [:div#modal])
+          (profile/add-job req i (util/zipm title
+                                            company src
+                                            present
+                                            from-year from-month
+                                            to-year to-month
+                                            description))
+          response/hx-refresh)
         (components/modal "w-2/3"
                           [:form.p-3 {:hx-post "job-edit-modal:save"
                                       :hx-target "#modal"
                                       :onclick hide-search-results}
-                           [:div.my-2 (components/h2 modal-title)]
+                           [:input {:type "hidden" :name "i" :value i}]
+                           [:div.my-2 (components/h2
+                                       (if i (i18n "Edit Job") (i18n "New Job")))]
                            ;; job title
                            [:div {:class "my-1 w-1/2"}
                             (components/text
@@ -153,26 +156,50 @@
 
 (defcomponent ^:endpoint new-job [req]
   (if top-level?
-    (simpleui/apply-component job-edit-modal req (i18n "New Job"))
+    (simpleui/apply-component job-edit-modal req)
     [:div.my-3 {:hx-get "new-job"
                 :hx-target "#modal"}
      (components/button (i18n "Add Job"))]))
 
-(defcomponent ^:endpoint edit-job [req ^:edn job]
+(defcomponent ^:endpoint edit-job [req ^:long i ^:edn job]
   (if top-level?
-    (simpleui/apply-component-map job-edit-modal job req (i18n "Edit Job"))
-    [:span {:hx-get "new-job"
+    (simpleui/apply-component-map job-edit-modal job req i)
+    [:span {:hx-get "edit-job"
             :hx-target "#modal"
-            :hx-vals {:job (pr-str job)}}
+            :hx-vals {:job (pr-str job)
+                      :i i}}
      (components/button (i18n "Edit Job"))]))
 
+(defcomponent ^:endpoint delete-job [req ^:long i job-title]
+  (if top-level?
+    (do
+      (profile/remove-job req i)
+      "")
+    [:span {:hx-delete "delete-job"
+            :hx-vals {:i i}
+            :hx-confirm (format (i18n "Delete %s?") job-title)}
+     (components/button (i18n "Delete Job"))]))
+
 (defcomponent ^:endpoint work-history [req jobs ^:long i]
-  [:div.p-3
+  [:div.p-1
    (map-indexed
      (fn [i {:keys [title
                     company src
                     present
                     from-year from-month
                     to-year to-month
-                    description] :as job}])
+                    description] :as job}]
+       [:div.border-b {:hx-target "this"}
+        [:div.my-1.flex.items-center
+         (components/h2 title)
+         [:span.m-2.flex (edit-job req i job) (delete-job req i title)]]
+        [:div.flex.items-center.my-1
+         [:span.mr-4.text-lg company]
+         (when src [:img.w-9 {:src (str "/api/company/" src)}])]
+        [:div.my-1
+         ((months) from-month) " " from-year " - "
+         (if present
+           (i18n "Present")
+           [:span ((months) to-month) " " to-year])]
+        [:div.my-2 description]])
      jobs)])
