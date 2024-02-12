@@ -14,6 +14,6 @@
         (client/post "http://localhost:3001/forms/chromium/convert/url"
                      {:multipart
                       (->multipart
-                       {:url "http://localhost:3000/api/profile"
+                       {:url (format "http://%s:3000/api/profile" (System/getenv "DOCKER_HOST"))
                         :extraHttpHeaders (json/write-str {:cookie cookie})})
                       :as :stream})))
