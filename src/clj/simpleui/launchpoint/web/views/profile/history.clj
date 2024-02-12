@@ -101,6 +101,35 @@
    [:div {:class "w-1/2"}
     (month-select (i18n "To Month") "to-month" to-month (not present))]])
 
+[:div {:class "w-1/2"}]
+(defcomponent ^:endpoint education-edit-modal [req
+                                               ^:long-option i
+                                               degree institution year
+                                               command]
+  (case command
+        "save"
+        (do
+          (profile/add-education req i (util/zipm degree institution year))
+          response/hx-refresh)
+        (components/modal "w-1/2"
+                          [:form.p-3 {:hx-post "education-edit-modal:save"
+                                      :hx-target "#modal"}
+                           [:input {:type "hidden" :name "i" :value i}]
+                           [:div.my-2
+                            (components/h2
+                             (if i (i18n "Edit Education") (i18n "New Education")))]
+                           [:div.my-1
+                            (components/text
+                             (i18n "Degree") "degree" degree :asterisk)]
+                           [:div.my-1
+                            (components/text
+                             (i18n "Institution") "institution" institution :asterisk)]
+                           [:div.my-1
+                            (components/number
+                             (i18n "Year") "year" year :asterisk)]
+                           (components/submit (i18n "Save"))
+                           ])))
+
 [:div {:class "w-2/3"}]
 (defcomponent ^:endpoint job-edit-modal [req
                                          ^:long-option i
@@ -166,8 +195,7 @@
     (simpleui/apply-component-map job-edit-modal job req i)
     [:span {:hx-get "edit-job"
             :hx-target "#modal"
-            :hx-vals {:job (pr-str job)
-                      :i i}}
+            :hx-vals {:job (pr-str job) :i i}}
      (components/button (i18n "Edit Job"))]))
 
 (defcomponent ^:endpoint delete-job [req ^:long i job-title]
@@ -180,7 +208,46 @@
             :hx-confirm (format (i18n "Delete %s?") job-title)}
      (components/button (i18n "Delete Job"))]))
 
-(defcomponent ^:endpoint work-history [req jobs ^:long i]
+(defcomponent ^:endpoint new-education [req]
+  (if top-level?
+    (simpleui/apply-component education-edit-modal req)
+    [:div.my-3 {:hx-get "new-education"
+                :hx-target "#modal"}
+     (components/button (i18n "Add Education"))]))
+
+(defcomponent ^:endpoint edit-education [req ^:long i ^:edn education]
+  (if top-level?
+    (simpleui/apply-component-map education-edit-modal education req i)
+    [:span {:hx-get "edit-education"
+            :hx-target "#modal"
+            :hx-vals {:eudcation (pr-str education) :i i}}
+     (components/button (i18n "Edit Education"))]))
+
+(defcomponent ^:endpoint delete-education [req ^:long i degree]
+  (if top-level?
+    (do
+      (profile/remove-education req i)
+      "")
+    [:span {:hx-delete "delete-education"
+            :hx-vals {:i i}
+            :hx-confirm (format (i18n "Delete %s?") degree)}
+     (components/button (i18n "Delete Education"))]))
+
+(defcomponent education-history [req education]
+  [:div.p-1
+   (map-indexed
+    (fn [i {:keys [degree institution year] :as education}]
+      [:div {:hx-target "this"}
+       [:div.my-1.flex.items-center
+        (components/h2 degree)
+        [:span.m-2.flex (edit-education req i education) (delete-job req i degree)]]
+       [:div.my-1
+        [:span.text-lg institution]]
+       [:div.my-1 year]
+       [:hr {:class "border w-1/2"}]])
+    education)])
+
+(defcomponent work-history [req jobs]
   [:div.p-1
    (map-indexed
      (fn [i {:keys [title
@@ -189,7 +256,7 @@
                     from-year from-month
                     to-year to-month
                     description] :as job}]
-       [:div.border-b {:hx-target "this"}
+       [:div {:hx-target "this"}
         [:div.my-1.flex.items-center
          (components/h2 title)
          [:span.m-2.flex (edit-job req i job) (delete-job req i title)]]
@@ -201,5 +268,6 @@
          (if present
            (i18n "Present")
            [:span ((months) to-month) " " to-year])]
-        [:div.my-2 description]])
+        [:div.my-2 description]
+        [:hr {:class "border w-1/2"}]])
      jobs)])

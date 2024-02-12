@@ -54,7 +54,7 @@
 (defn button [label]
   [:span.p-1
    [:button {:type "button"
-             :class "bg-clj-blue p-1.5 rounded-lg text-white w-24"}
+             :class "bg-clj-blue py-1.5 px-3 rounded-lg text-white"}
     label]])
 
 (defn warning [msg]

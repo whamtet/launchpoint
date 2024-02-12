@@ -79,7 +79,7 @@
 
 (defcomponent ^:endpoint profile [req]
   (let [{:keys [first_name last_name email]} (user/get-user req)
-        {:keys [description jobs] :as cv} (profile/get-cv req)]
+        {:keys [description jobs education] :as cv} (profile/get-cv req)]
     [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
      [:a.absolute.top-3.left-3 {:href "/"}
       [:img.w-24 {:src "/logo.svg"}]]
@@ -92,7 +92,10 @@
       (description-section req description)
       (components/h3 (i18n "Work History"))
       (profile.history/new-job req)
-      (profile.history/work-history req jobs nil)
+      (profile.history/work-history req jobs)
+      (components/h3 (i18n "Education"))
+      (profile.history/new-education req)
+      (profile.history/education-history req education)
       ]]))
 
 (defn ui-routes [{:keys [query-fn]}]

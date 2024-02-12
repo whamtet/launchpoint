@@ -18,10 +18,11 @@
 (defn update-description [req description]
   (update-cv req assoc :description description))
 
-(defn- date-value [{:keys [from-year from-month]}]
-  (if (and from-year from-month)
-    (+ (* 12 from-year) from-month)
-    0))
+(defn- date-value [{:keys [year from-year from-month]}]
+  (cond
+   (and from-year from-month) (+ (* 12 from-year) from-month)
+   year year
+   :else 0))
 
 (defn- clean-job [{:keys [src company] :as job}]
   (if (company/company-match? src company)
@@ -39,3 +40,9 @@
 
 (defn remove-job [req i]
   (update-cv req update :jobs util/remove-i i))
+
+(defn add-education [req i education]
+  (update-cv req update :education add-job_ i education))
+
+(defn remove-education [req i]
+  (update-cv req update :education util/remove-i i))
