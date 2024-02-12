@@ -30,16 +30,21 @@
                              :target "_blank"
                              :_ "on click add .hidden to #modal"}
                          (components/button (i18n "Edit"))]]])
-    [:a#pic {:href ""
-             :hx-get "pic"
-             :hx-target "#modal"
-             :hx-vals {:email email}}
+    [:a {:href ""
+         :hx-get "pic"
+         :hx-target "#modal"
+         :hx-vals {:email email}}
      [:div.m-2.border.rounded-lg.inline-block.overflow-hidden.relative
       ;; hoverable
       [:div {:class "absolute left-0 top-0 w-64 h-64
       hidden justify-center items-center"}
        [:div.text-white.text-4xl (i18n "Edit")]]
       [:img {:src (gravatar email)}]]]))
+
+(defn- pic-pdf [email]
+  [:a
+   [:div.m-2.border.rounded-lg.inline-block.overflow-hidden.relative
+    [:img {:src (gravatar email)}]]])
 
 (defcomponent ^:endpoint names [req first_name last_name command]
   (when (= "save" command)
@@ -64,6 +69,10 @@
                              :last_name last_name}}
           (components/button (i18n "Edit"))]]))
 
+(defn- names-pdf [first_name last_name]
+  [:div
+   [:span.text-2xl first_name " " last_name]])
+
 (defcomponent ^:endpoint description-section [req description]
   (if top-level?
     (do (profile/update-description req description) nil)
@@ -79,7 +88,7 @@
 
 (defcomponent ^:endpoint profile [req]
   (let [{:keys [first_name last_name email]} (user/get-user req)
-        {:keys [description jobs education] :as cv} (profile/get-cv req)]
+        {:keys [description jobs education]} (profile/get-cv req)]
     [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
      [:a.absolute.top-3.left-3 {:href "/"}
       [:img.w-24 {:src "/logo.svg"}]]
@@ -92,10 +101,26 @@
       (description-section req description)
       (components/h3 (i18n "Work History"))
       (profile.history/new-job req)
-      (profile.history/work-history req jobs)
+      (profile.history/work-history req jobs false)
       (components/h3 (i18n "Education"))
       (profile.history/new-education req)
-      (profile.history/education-history req education)
+      (profile.history/education-history req education false)
+      ]]))
+
+(defn profile-pdf [req]
+  (let [{:keys [first_name last_name email]} (user/get-user req)
+        {:keys [description jobs education]} (profile/get-cv req)]
+    [:div.p-1
+     [:div {:class "w-2/3 mx-auto"}
+      (pic-pdf email)
+      (names-pdf first_name last_name)
+      [:hr.w-96.my-6.border]
+      ;;description
+      [:div description]
+      (components/h3 (i18n "Work History"))
+      (profile.history/work-history req jobs true)
+      (components/h3 (i18n "Education"))
+      (profile.history/education-history req education true)
       ]]))
 
 (defn ui-routes [{:keys [query-fn]}]

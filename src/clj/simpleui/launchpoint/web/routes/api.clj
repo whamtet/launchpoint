@@ -3,8 +3,10 @@
     [clojure.java.io :as io]
     [simpleui.launchpoint.web.controllers.health :as health]
     [simpleui.launchpoint.web.controllers.login :as login]
+    [simpleui.launchpoint.web.htmx :refer [page-simple]]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
+    [simpleui.launchpoint.web.views.profile :refer [profile-pdf]]
     [integrant.core :as ig]
     [reitit.coercion.malli :as malli]
     [reitit.ring.coercion :as coercion]
@@ -34,7 +36,7 @@
                 exception/wrap-exception]})
 
 ;; Routes
-(defn api-routes [_opts]
+(defn api-routes [{:keys [query-fn]}]
   [["/swagger.json"
     {:get {:no-doc  true
            :swagger {:info {:title "simpleui.launchpoint API"}}
@@ -48,6 +50,10 @@
       {:status 200
        :headers {}
        :body (->> path-params :src (str "logos/") io/input-stream)})]
+   ["/profile"
+    (fn [req]
+      (page-simple {:css ["/output.css"]}
+                   (profile-pdf (assoc req :query-fn query-fn))))]
    ["/health"
     {:get health/healthcheck!}]])
 

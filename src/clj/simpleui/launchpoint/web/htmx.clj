@@ -24,10 +24,6 @@
     (.replace s ".min" "")
     s))
 
-(defn- htmx []
-  [:script {:src
-            (unminify "https://unpkg.com/htmx.org@1.9.5/dist/htmx.min.js")}])
-
 (defn page-htmx [{:keys [css js hyperscript?]} & body]
   (page
    [:head
@@ -38,12 +34,21 @@
       [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
    [:body
     (render/walk-attrs body)
-    (htmx)
+    [:script {:src
+              (unminify "https://unpkg.com/htmx.org@1.9.5/dist/htmx.min.js")}]
     [:script "htmx.config.defaultSwapStyle = 'outerHTML';"]
     (for [js js]
       [:script {:src js}])
     (when hyperscript?
           [:script {:src (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js")}])]))
+
+(defn page-simple [{:keys [css]} & body]
+  (page
+   [:head
+    [:meta {:charset "UTF-8"}]
+    (for [sheet css]
+      [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
+   [:body (render/walk-attrs body)]))
 
 (defmacro defcomponent
   [name [req :as args] & body]
