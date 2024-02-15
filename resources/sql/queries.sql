@@ -22,3 +22,9 @@ on conflict(user_id) do update set cv = :cv
 update user
 set first_name = :first_name, last_name = :last_name
 where id = :id
+
+-- :name inventory-all :query
+select * from inventory;
+
+-- :name ratings-all :query
+select * from ratings;

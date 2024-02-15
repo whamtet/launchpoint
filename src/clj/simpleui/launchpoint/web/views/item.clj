@@ -2,8 +2,7 @@
     (:require
       [simpleui.core :as simpleui]
       [simpleui.launchpoint.i18n :refer [i18n]]
-      [simpleui.launchpoint.web.controllers.profile :as profile]
-      [simpleui.launchpoint.web.controllers.user :as user]
+      [simpleui.launchpoint.web.controllers.store :as store]
       [simpleui.launchpoint.web.htmx :refer [page-htmx defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.dashboard :as dashboard :refer [gravatar]]
@@ -11,7 +10,7 @@
       [simpleui.response :as response]))
 
 (defcomponent item [req]
-  [:div "item"])
+  [:div (pr-str (store/items req))])
 
 (defn ui-routes [{:keys [query-fn]}]
   (simpleui/make-routes

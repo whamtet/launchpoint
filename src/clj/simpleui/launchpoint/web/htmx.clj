@@ -24,7 +24,7 @@
     (.replace s ".min" "")
     s))
 
-(defn page-htmx [{:keys [css js hyperscript? freeimage?]} & body]
+(defn page-htmx [{:keys [css js hyperscript?]} & body]
   (page
    [:head
     [:meta {:charset "UTF-8"}]
@@ -39,8 +39,6 @@
     [:script "htmx.config.defaultSwapStyle = 'outerHTML';"]
     (for [js js]
       [:script {:src js}])
-    (when freeimage?
-          [:script {:async true :src "//freeimage.host/sdk/pup.js" :data-url "https://freeimage.host/upload"}])
     (when hyperscript?
           [:script {:src (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js")}])]))
 
