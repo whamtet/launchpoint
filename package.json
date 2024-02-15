@@ -7,6 +7,6 @@
   },
   "scripts": {
     "tailwind": "nbb -m autogen.main src/clj/simpleui/launchpoint/web/views && tailwind -m -i tailwind/input.css -o resources/public/output.css",
-    "tailwind:watch": "nbb -m autogen.main -w"
+    "tailwind:watch": "nbb -m autogen.main -w src/clj/simpleui/launchpoint/web/views"
   }
 }

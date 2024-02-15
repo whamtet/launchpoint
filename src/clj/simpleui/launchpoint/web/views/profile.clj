@@ -1,22 +1,14 @@
 (ns simpleui.launchpoint.web.views.profile
     (:require
-      [clj-commons.digest :as digest]
       [simpleui.core :as simpleui]
       [simpleui.launchpoint.i18n :refer [i18n]]
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.htmx :refer [page-htmx defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
-      [simpleui.launchpoint.web.views.dashboard :as dashboard]
+      [simpleui.launchpoint.web.views.dashboard :as dashboard :refer [gravatar]]
       [simpleui.launchpoint.web.views.profile.history :as profile.history]
       [simpleui.response :as response]))
-
-(defn- gravatar [^String email]
-  (some->> email
-           .trim
-           .toLowerCase
-           digest/sha256
-           (format "https://gravatar.com/avatar/%s?s=256")))
 
 (defcomponent ^:endpoint pic [req email]
   (if top-level?
@@ -67,7 +59,10 @@
                    :hx-get "names:edit"
                    :hx-vals {:first_name first_name
                              :last_name last_name}}
-          (components/button (i18n "Edit"))]]))
+          (components/button (i18n "Edit"))]
+         [:a.ml-2 {:href "/api/profile/pdf"
+                   :target "_blank"}
+          (components/button (i18n "View PDF"))]]))
 
 (defn- names-pdf [first_name last_name]
   [:div
