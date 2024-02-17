@@ -18,6 +18,16 @@ insert into cv (user_id, cv)
 values (:id, :cv)
 on conflict(user_id) do update set cv = :cv
 
+-- :name upsert-price :execute
+insert into inventory (item_id, price)
+values (:item_id, :price)
+on conflict(item_id) do update set price = :price
+
+-- :name upsert-count :execute
+insert into inventory (item_id, count)
+values (:item_id, :count)
+on conflict(item_id) do update set count = :count
+
 -- :name update-names :execute
 update user
 set first_name = :first_name, last_name = :last_name

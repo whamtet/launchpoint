@@ -3,7 +3,7 @@
    [simpleui.launchpoint.web.middleware.exception :as exception]
    [simpleui.launchpoint.web.middleware.formats :as formats]
    [simpleui.launchpoint.web.views.home :as home]
-   [simpleui.launchpoint.web.views.item :as item]
+   [simpleui.launchpoint.web.views.store :as store]
    [simpleui.launchpoint.web.views.profile :as profile]
    [integrant.core :as ig]
    [reitit.ring.middleware.muuntaja :as muuntaja]
@@ -29,5 +29,5 @@
       :or   {base-path ""}
       :as   opts}]
   [[base-path (route-data opts) (home/ui-routes opts)]
-   ["/item" (route-data opts) (item/ui-routes opts)]
+   ["/store" (route-data opts) (store/ui-routes opts)]
    ["/profile" (route-data opts) (profile/ui-routes opts)]])

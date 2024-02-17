@@ -10,6 +10,7 @@
 (defn- prep-item [m]
   (-> m
       (update :id dec)
+      (assoc :count 100)
       (update :rating set-rating)))
 
 (def items-raw
@@ -24,10 +25,18 @@
       (update-in [id :rating :rate] + rating)
       (update-in [id :rating :count] inc)))
 
-(defn- add-count [items {:keys [id count]}]
-  (assoc-in items [id :count] count))
+(defn- add-inventory [items {:keys [item_id price count]}]
+  (-> items
+      (update-in [item_id :price] #(or price %))
+      (update-in [item_id :count] #(or count %))))
 
 (defn items [{:keys [query-fn]}]
   (as-> items-raw items
         (reduce add-rating items (query-fn :ratings-all {}))
-        (reduce add-count items (query-fn :inventory-all {}))))
+        (reduce add-inventory items (query-fn :inventory-all {}))))
+
+(defn upsert-price [{:keys [query-fn]} item_id price]
+  (query-fn :upsert-price {:item_id item_id :price price}))
+
+(defn upsert-count [{:keys [query-fn]} item_id count]
+  (query-fn :upsert-count {:item_id item_id :count count}))
