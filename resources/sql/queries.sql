@@ -1,7 +1,7 @@
 -- Place your queries here. Docs available https://www.hugsql.org/
 -- :name insert-user :returning-execute
-insert into user (first_name, last_name, email, password)
-values (:first-name, :last-name, :email, :password)
+insert into user (first_name, last_name, q, email, password)
+values (:first-name, :last-name, :q, :email, :password)
 returning id
 
 -- :name get-user-by-email :query :one
@@ -38,3 +38,6 @@ select * from inventory;
 
 -- :name ratings-all :query
 select * from ratings;
+
+-- :name search-users :query
+select * from user where q like :q;

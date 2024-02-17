@@ -1,5 +1,6 @@
 (ns simpleui.launchpoint.web.controllers.login
   (:require
+    [simpleui.launchpoint.util :refer [deftrim]]
     simpleui.response
     [crypto.password.bcrypt :as password]))
 
@@ -22,12 +23,12 @@
 (defn duplicate-email? [e]
   (-> e str (.contains "(UNIQUE constraint failed: user.email)")))
 
-(defn register [{:keys [query-fn session]}
-                first-name
-                last-name
-                email
-                password
-                password2]
+(deftrim register [{:keys [query-fn session]}
+                   ^:trim first-name
+                   ^:trim last-name
+                   ^:trim email
+                   ^:trim password
+                   ^:trim password2]
   (cond
    (not= password password2) :pw-match
    (not (re-find pw-regex password)) :pw-quality
@@ -37,6 +38,7 @@
           password/encrypt
           (hash-map :first-name first-name
                     :last-name last-name
+                    :q (.toLowerCase (str first-name " " last-name))
                     :email email
                     :password)
           (query-fn :insert-user)

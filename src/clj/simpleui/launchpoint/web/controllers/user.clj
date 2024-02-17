@@ -8,3 +8,6 @@
             (assoc session
                    :first_name first_name
                    :last_name last_name)))
+
+(defn search-users [{:keys [query-fn]} q]
+  (query-fn :search-users {:q (str "%" q "%")}))

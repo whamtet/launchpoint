@@ -5,18 +5,17 @@
 (defn- button [label]
   [:div
    [:button {:type "button"
-             :class "bg-clj-blue p-1.5 rounded-lg text-white w-24 caret"
+             :class "bg-clj-blue p-1.5 rounded-lg text-white w-24 caret absolute right-0"
              :_ "on click halt the event then toggle .hidden on the next <div />"}
     label]])
 
 (defn dropdown [label other-items]
-  [:div.p-1
+  [:div.p-1.relative
    (button label)
-   [:div {:class "drop hidden rounded-lg border p-1 m-1"}
+   [:div {:class "drop hidden rounded-lg border p-1 m-1 absolute right-0 top-9 w-48"}
     (for [item other-items]
-      [:a {:href ""}
-       [:div {:class "hover:bg-slate-100"}
-        item]])]])
+      [:div {:class "hover:bg-slate-100"}
+       item])]])
 
 (defn- button-up [label]
   [:div
