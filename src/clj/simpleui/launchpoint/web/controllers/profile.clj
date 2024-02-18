@@ -49,4 +49,4 @@
   (update-cv req update :education util/remove-i i))
 
 (defn import-profile [req file]
-  (import/slurp-pdf file))
+  (->> file import/gen-cv (upsert req)))

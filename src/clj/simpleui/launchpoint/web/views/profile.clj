@@ -35,12 +35,14 @@
 
 (defcomponent ^:endpoint import-modal [req command file]
   (case command
-        "upload" (println (profile/import-profile req file))
+        "upload" (do
+                   (profile/import-profile req file)
+                   response/hx-refresh)
         "modal"
         (components/modal "w-1/2"
                           [:div.p-3
                            (components/h2 (i18n "Import LinkedIn PDF"))
-                           [:div.mt-2 (i18n "On your profile page click the menu as shown below")]
+                           [:div.mt-2 (i18n "On your LinkedIn profile page click the menu as shown below")]
                            [:img.my-2.w-60.border.rounded-lg.overflow-none {:src "/save-to-pdf.png"}]
                            [:input {:type "file"
                                     :name "file"

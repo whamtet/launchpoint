@@ -28,3 +28,7 @@
   `(-> ~s
     ~@(for [[to-replace replacement] (distinct (re-seq #"\{([^\}]+)}" s))]
        `(string/replace ~to-replace (str ~(read-string replacement))))))
+
+(defn max-by [f s]
+  (when (not-empty s)
+        (apply max-key f s)))
