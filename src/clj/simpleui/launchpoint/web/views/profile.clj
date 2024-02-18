@@ -22,16 +22,34 @@
                              :target "_blank"
                              :_ "on click add .hidden to #modal"}
                          (components/button (i18n "Edit"))]]])
-    [:a {:href ""
-         :hx-get "pic"
-         :hx-target "#modal"
-         :hx-vals {:email email}}
+    [:a#pic {:href ""
+             :hx-get "pic"
+             :hx-target "#modal"
+             :hx-vals {:email email}}
      [:div.m-2.border.rounded-lg.inline-block.overflow-hidden.relative
       ;; hoverable
       [:div {:class "absolute left-0 top-0 w-64 h-64
       hidden justify-center items-center"}
        [:div.text-white.text-4xl (i18n "Edit")]]
       [:img {:src (gravatar email)}]]]))
+
+(defcomponent ^:endpoint import-modal [req command file]
+  (case command
+        "upload" (println (profile/import-profile req file))
+        "modal"
+        (components/modal "w-1/2"
+                          [:div.p-3
+                           (components/h2 (i18n "Import LinkedIn PDF"))
+                           [:img.w-60 {:src "/save-to-pdf.png"}]
+                           [:input {:type "file"
+                                    :name "file"
+                                    :accept "application/pdf"
+                                    :hx-encoding "multipart/form-data"
+                                    :hx-post "import-modal:upload"}]])
+        [:a.ml-2 {:href "#"
+                  :hx-get "import-modal:modal"
+                  :hx-target "#modal"}
+         (components/button (i18n "Import from LinkedIn"))]))
 
 (defn- pic-pdf [email]
   [:a
@@ -62,7 +80,8 @@
           (components/button (i18n "Edit"))]
          [:a.ml-2 {:href "/api/profile/pdf"
                    :target "_blank"}
-          (components/button (i18n "View PDF"))]]))
+          (components/button (i18n "View PDF"))]
+         (import-modal req)]))
 
 (defn- names-pdf [first_name last_name]
   [:div

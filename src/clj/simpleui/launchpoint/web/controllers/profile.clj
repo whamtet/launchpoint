@@ -1,7 +1,8 @@
 (ns simpleui.launchpoint.web.controllers.profile
     (:require
       [simpleui.launchpoint.util :as util]
-      [simpleui.launchpoint.web.controllers.company :as company]))
+      [simpleui.launchpoint.web.controllers.company :as company]
+      [simpleui.launchpoint.web.controllers.profile.import :as import]))
 
 (defn- upsert [{:keys [session query-fn]} cv]
   (query-fn :upsert-cv (assoc session :cv (pr-str cv))))
@@ -46,3 +47,6 @@
 
 (defn remove-education [req i]
   (update-cv req update :education util/remove-i i))
+
+(defn import-profile [req file]
+  (import/slurp-pdf file))
