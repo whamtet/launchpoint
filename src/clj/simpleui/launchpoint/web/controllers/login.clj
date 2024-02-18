@@ -43,7 +43,7 @@
                     :password)
           (query-fn :insert-user)
           first
-          :id
+          :user_id
           (assoc-session session :id))
      (catch clojure.lang.ExceptionInfo e
        (if (duplicate-email? e)
@@ -58,6 +58,6 @@
              password]
   (if-let [record (query-fn :get-user-by-email {:email email})]
     (if (->> record :password (password/check password))
-      (assoc-session session :id (:id record))
+      (assoc-session session :id (:user_id record))
       :unknown)
     :unknown))

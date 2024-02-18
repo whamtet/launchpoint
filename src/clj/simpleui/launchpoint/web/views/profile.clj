@@ -40,7 +40,8 @@
         (components/modal "w-1/2"
                           [:div.p-3
                            (components/h2 (i18n "Import LinkedIn PDF"))
-                           [:img.w-60 {:src "/save-to-pdf.png"}]
+                           [:div.mt-2 (i18n "On your profile page click the menu as shown below")]
+                           [:img.my-2.w-60.border.rounded-lg.overflow-none {:src "/save-to-pdf.png"}]
                            [:input {:type "file"
                                     :name "file"
                                     :accept "application/pdf"
