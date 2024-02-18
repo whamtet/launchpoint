@@ -34,28 +34,31 @@
       [:img {:src (gravatar email)}]]]))
 
 (def import-error
-  [:div#import-problem.mt-3
+  [:div.mt-3
    (components/warning (i18n "Something went wrong.  Please email your PDF to whamtet@gmail.com"))])
+
+(defn import-disp [error?]
+  (components/modal "w-1/2"
+                    [:div.p-3
+                     (components/h2 (i18n "Import LinkedIn PDF"))
+                     [:div.mt-2 (i18n "On your LinkedIn profile page click the menu as shown below")]
+                     [:img.my-2.w-60.border.rounded-lg.overflow-none {:src "/save-to-pdf.png"}]
+                     [:input {:type "file"
+                              :name "file"
+                              :accept "application/pdf"
+                              :hx-encoding "multipart/form-data"
+                              :hx-post "import-modal:upload"
+                              :hx-target "#modal"}]
+                     (when error? import-error)]))
 
 (defcomponent ^:endpoint import-modal [req command file]
   (case command
         "upload" (try
                    (profile/import-profile req file)
                    response/hx-refresh
-                   (catch Throwable t import-error))
-        "modal"
-        (components/modal "w-1/2"
-                          [:div.p-3
-                           (components/h2 (i18n "Import LinkedIn PDF"))
-                           [:div.mt-2 (i18n "On your LinkedIn profile page click the menu as shown below")]
-                           [:img.my-2.w-60.border.rounded-lg.overflow-none {:src "/save-to-pdf.png"}]
-                           [:input {:type "file"
-                                    :name "file"
-                                    :accept "application/pdf"
-                                    :hx-encoding "multipart/form-data"
-                                    :hx-post "import-modal:upload"
-                                    :hx-target "#import-problem"}]
-                           [:div#import-problem]])
+                   (catch Throwable t
+                     (import-disp true)))
+        "modal" (import-disp false)
         [:a.ml-2 {:href "#"
                   :hx-get "import-modal:modal"
                   :hx-target "#modal"}
