@@ -33,11 +33,16 @@
        [:div.text-white.text-4xl (i18n "Edit")]]
       [:img {:src (gravatar email)}]]]))
 
+(def import-error
+  [:div#import-problem.mt-3
+   (components/warning (i18n "Something went wrong.  Please email your PDF to whamtet@gmail.com"))])
+
 (defcomponent ^:endpoint import-modal [req command file]
   (case command
-        "upload" (do
+        "upload" (try
                    (profile/import-profile req file)
-                   response/hx-refresh)
+                   response/hx-refresh
+                   (catch Throwable t import-error))
         "modal"
         (components/modal "w-1/2"
                           [:div.p-3
@@ -48,7 +53,9 @@
                                     :name "file"
                                     :accept "application/pdf"
                                     :hx-encoding "multipart/form-data"
-                                    :hx-post "import-modal:upload"}]])
+                                    :hx-post "import-modal:upload"
+                                    :hx-target "#import-problem"}]
+                           [:div#import-problem]])
         [:a.ml-2 {:href "#"
                   :hx-get "import-modal:modal"
                   :hx-target "#modal"}
