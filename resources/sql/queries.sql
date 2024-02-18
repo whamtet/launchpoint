@@ -2,13 +2,13 @@
 -- :name insert-user :returning-execute
 insert into user (first_name, last_name, q, email, password)
 values (:first-name, :last-name, :q, :email, :password)
-returning id
+returning user_id
 
 -- :name get-user-by-email :query :one
-select id, password from user where email = :email
+select user_id, password from user where email = :email
 
 -- :name get-user :query :one
-select * from user where id = :id
+select * from user where user_id = :id
 
 -- :name get-cv :query :one
 select * from cv where user_id = :id

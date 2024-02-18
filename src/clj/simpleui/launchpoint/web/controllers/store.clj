@@ -10,7 +10,7 @@
 (defn- prep-item [m]
   (-> m
       (update :id dec)
-      (assoc :count 100)
+      (assoc :count 100 :q (.toLowerCase (:title m)))
       (update :rating set-rating)))
 
 (def items-raw
@@ -40,3 +40,6 @@
 
 (defn upsert-count [{:keys [query-fn]} item_id count]
   (query-fn :upsert-count {:item_id item_id :count count}))
+
+(defn search-items [q]
+  (filter #(.contains (:q %) q) items-raw))

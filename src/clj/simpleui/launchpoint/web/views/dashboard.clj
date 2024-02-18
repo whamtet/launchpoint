@@ -2,6 +2,7 @@
     (:require
       [clj-commons.digest :as digest]
       [simpleui.launchpoint.i18n :refer [i18n]]
+      [simpleui.launchpoint.util :refer [$format]]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.controllers.store :as store]
@@ -35,15 +36,34 @@
         (i18n "Logout")]]])])
 
 (defn combine-searches [req q]
-  (user/search-users req q))
+  (->> (concat (user/search-users req q) (store/search-items q))
+       (sort-by :q)
+       (take 5)))
+
+(defn- search-result [{:keys [user_id email first_name last_name
+                              id image title description]}]
+  (if user_id
+    [:a {:href ($format "/user/{user_id}/")}
+     [:div {:class "flex hover:bg-slate-100"}
+      [:img.w-20 {:src (gravatar email 80)}]
+      [:div.p-3.w-full.text-gray-700.text-lg.flex.flex-col.justify-center
+       first_name " " last_name]]]
+    [:a {:href ($format "/item/{id}/")}
+     [:div {:class "flex hover:bg-slate-100"}
+      [:img.w-20 {:src image}]
+      [:div.p-3.w-full.text-gray-700.text-lg.flex.flex-col.justify-center title]]]))
 
 (defcomponent ^:endpoint search [req q]
   (if top-level?
     (when (some-> q .trim count (> 3))
           [:div#search-results
-           (for [result (->> q .trim .toLowerCase (combine-searches req))]
-             [:div (pr-str result)])])
-    [:div {:class "w-1/2 mx-auto"}
+           {:class "drop rounded-lg border p-1 absolute top-18 w-full bg-white z-10"}
+           (->> q
+                .trim
+                .toLowerCase
+                (combine-searches req)
+                (map search-result))])
+    [:div {:class "w-1/2 mx-auto relative"}
      [:input {:class "w-full border rounded-full p-3"
               :type "text"
               :hx-get "search"
@@ -51,6 +71,8 @@
               :value q
               :hx-trigger "focus,keyup changed delay:0.5s"
               :hx-target "#search-results"
+              :_ "on click halt"
+              :autocomplete "off"
               :placeholder "Search..."}]
      [:div#search-results]]))
 

@@ -1,7 +1,10 @@
 (ns simpleui.launchpoint.web.controllers.user)
 
-(defn get-user [{:keys [query-fn session]}]
-  (query-fn :get-user session))
+(defn get-user
+  ([{:keys [query-fn session]}]
+   (query-fn :get-user session))
+  ([{:keys [query-fn]} id]
+   (query-fn :get-user {:id id})))
 
 (defn update-names [{:keys [query-fn session]} first_name last_name]
   (query-fn :update-names

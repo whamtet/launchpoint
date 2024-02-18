@@ -1,4 +1,6 @@
-(ns simpleui.launchpoint.util)
+(ns simpleui.launchpoint.util
+    (:require
+      [clojure.string :as string]))
 
 (defmacro zipm [& syms]
   (zipmap (map keyword syms) syms))
@@ -20,3 +22,9 @@
     `(defn ~s ~args
       (let [~trims (map (memfn trim) ~trims)]
         ~@body))))
+
+(defmacro $format [s]
+  (assert (string? s))
+  `(-> ~s
+    ~@(for [[to-replace replacement] (distinct (re-seq #"\{([^\}]+)}" s))]
+       `(string/replace ~to-replace (str ~(read-string replacement))))))
