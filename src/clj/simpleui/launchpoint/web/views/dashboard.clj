@@ -55,7 +55,7 @@
 
 (defcomponent ^:endpoint search [req q]
   (if top-level?
-    (when (some-> q .trim count (> 3))
+    (when (some-> q .trim count (>= 3))
           [:div#search-results
            {:class "drop rounded-lg border p-1 absolute top-18 w-full bg-white z-10"}
            (->> q

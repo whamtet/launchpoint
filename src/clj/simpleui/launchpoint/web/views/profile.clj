@@ -43,6 +43,8 @@
                      (components/h2 (i18n "Import LinkedIn PDF"))
                      [:div.mt-2 (i18n "On your LinkedIn profile page click the menu as shown below")]
                      [:img.my-2.w-60.border.rounded-lg.overflow-none {:src "/save-to-pdf.png"}]
+                     [:div.mt-2 (i18n "Upload the PDF here")]
+                     [:hr.my-2.border]
                      [:input {:type "file"
                               :name "file"
                               :accept "application/pdf"
@@ -120,7 +122,7 @@
      [:a.absolute.top-3.left-3 {:href "/"}
       [:img.w-24 {:src "/logo.svg"}]]
      (dashboard/main-dropdown first_name)
-     [:div {:class "min-h-screen w-2/3 mx-auto"}
+     [:div {:class "w-2/3 mx-auto"}
       [:div#modal]
       (pic req email)
       (names req first_name last_name nil)

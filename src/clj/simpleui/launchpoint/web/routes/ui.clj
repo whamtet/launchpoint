@@ -3,6 +3,7 @@
    [simpleui.launchpoint.web.middleware.exception :as exception]
    [simpleui.launchpoint.web.middleware.formats :as formats]
    [simpleui.launchpoint.web.views.home :as home]
+   [simpleui.launchpoint.web.views.item :as item]
    [simpleui.launchpoint.web.views.store :as store]
    [simpleui.launchpoint.web.views.profile :as profile]
    [integrant.core :as ig]
@@ -25,9 +26,8 @@
 (derive :reitit.routes/ui :reitit/routes)
 
 (defmethod ig/init-key :reitit.routes/ui
-  [_ {:keys [base-path]
-      :or   {base-path ""}
-      :as   opts}]
-  [[base-path (route-data opts) (home/ui-routes opts)]
+  [_ opts]
+  [["" (route-data opts) (home/ui-routes opts)]
    ["/store" (route-data opts) (store/ui-routes opts)]
-   ["/profile" (route-data opts) (profile/ui-routes opts)]])
+   ["/profile" (route-data opts) (profile/ui-routes opts)]
+   ["/item/:item-id" (route-data opts) (item/ui-routes opts)]])

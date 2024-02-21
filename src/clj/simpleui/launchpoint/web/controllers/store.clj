@@ -20,10 +20,10 @@
       (json/read-str :key-fn keyword)
       (->> (mapv prep-item))))
 
-(defn- add-rating [items {:keys [id rating]}]
+(defn- add-rating [items {:keys [inventory_id rating]}]
   (-> items
-      (update-in [id :rating :rate] + rating)
-      (update-in [id :rating :count] inc)))
+      (update-in [inventory_id :rating :rate] + rating)
+      (update-in [inventory_id :rating :count] inc)))
 
 (defn- add-inventory [items {:keys [item_id price count]}]
   (-> items
@@ -43,3 +43,6 @@
 
 (defn search-items [q]
   (filter #(.contains (:q %) q) items-raw))
+
+(defn get-item [req]
+  (-> req :path-params :item-id Long/parseLong ((items req))))
