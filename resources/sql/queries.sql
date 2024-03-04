@@ -39,5 +39,8 @@ select * from inventory;
 -- :name ratings-all :query
 select * from ratings;
 
+-- :name rating :query :one
+select * from ratings where user_id = :id and inventory_id = :item-id
+
 -- :name search-users :query
 select * from user where q like :q;

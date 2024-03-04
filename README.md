@@ -2,6 +2,8 @@
 
 Demo [SimpleUI](https://simpleui.io) app with open source components.
 
+## Usage
+
 Start a [REPL](#repls) in your editor or terminal of choice.
 
 Start the server with:

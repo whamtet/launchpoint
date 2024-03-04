@@ -25,6 +25,9 @@
       (update-in [inventory_id :rating :rate] + rating)
       (update-in [inventory_id :rating :count] inc)))
 
+(defn- add-rating1 [item {:keys [rating]}]
+  (assoc item :rating rating))
+
 (defn- add-inventory [items {:keys [item_id price count]}]
   (-> items
       (update-in [item_id :price] #(or price %))
@@ -44,5 +47,9 @@
 (defn search-items [q]
   (filter #(.contains (:q %) q) items-raw))
 
-(defn get-item [req]
-  (-> req :path-params :item-id Long/parseLong ((items req))))
+(defn get-item [{:keys [path-params query-fn session] :as req}]
+  (-> path-params
+      :item-id
+      Long/parseLong
+      ((items req))
+      (add-rating1 (query-fn :rating (merge path-params session)))))
