@@ -56,5 +56,5 @@
  :reitit.routes/ui {:base-path "",
                     :env #ig/ref :system/env
                     :query-fn #ig/ref :db.sql/query-fn}
- #_#_:nrepl/server {:port #long #or [#env NREPL_PORT 7001],
+ :nrepl/server {:port #long #or [#env NREPL_PORT 7001],
                 :bind #or [#env NREPL_HOST "127.0.0.1"]}}

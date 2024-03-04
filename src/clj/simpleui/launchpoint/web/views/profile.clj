@@ -2,6 +2,7 @@
     (:require
       [simpleui.core :as simpleui]
       [simpleui.launchpoint.i18n :refer [i18n]]
+      [simpleui.launchpoint.web.controllers.item-order :as item-order]
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.htmx :refer [page-htmx defcomponent]]
@@ -117,11 +118,12 @@
 
 (defcomponent ^:endpoint profile [req]
   (let [{:keys [first_name last_name email]} (user/get-user req)
-        {:keys [description jobs education]} (profile/get-cv req)]
+        {:keys [description jobs education]} (profile/get-cv req)
+        basket-count (item-order/basket-count req)]
     [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
      [:a.absolute.top-3.left-3 {:href "/"}
       [:img.w-24 {:src "/logo.svg"}]]
-     (dashboard/main-dropdown first_name)
+     (dashboard/main-dropdown basket-count first_name)
      [:div {:class "w-2/3 mx-auto"}
       [:div#modal]
       (pic req email)

@@ -44,3 +44,6 @@ select * from ratings where user_id = :id and inventory_id = :item-id
 
 -- :name search-users :query
 select * from user where q like :q;
+
+-- :name basket-count :query :one
+select count(*) as items from item_order where user_id = :id

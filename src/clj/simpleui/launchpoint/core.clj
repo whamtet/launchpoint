@@ -15,7 +15,7 @@
     [kit.edge.db.sql.conman]
     [simpleui.launchpoint.migratus]
     [simpleui.launchpoint.web.routes.ui]
-    #_[kit.edge.utils.nrepl])
+    [kit.edge.utils.nrepl])
   (:gen-class))
 
 ;; log uncaught exceptions in threads

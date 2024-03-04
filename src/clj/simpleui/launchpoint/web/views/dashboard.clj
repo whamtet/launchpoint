@@ -4,11 +4,13 @@
       [simpleui.launchpoint.i18n :refer [i18n]]
       [simpleui.launchpoint.util :refer [$format]]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
+      [simpleui.launchpoint.web.controllers.item-order :as item-order]
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.controllers.store :as store]
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.views.components :as components]
-      [simpleui.launchpoint.web.views.components.dropdown :as dropdown]))
+      [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
+      [simpleui.launchpoint.web.views.icons :as icons]))
 
 (defn gravatar
   ([^String email] (gravatar email 256))
@@ -18,8 +20,15 @@
                  (-> email .trim .toLowerCase digest/sha256)
                  size))))
 
-(defn main-dropdown [first_name]
-  [:div.absolute.top-1.right-1
+(defn main-dropdown [basket-count first_name]
+  [:div.absolute.top-1.right-1.flex
+   [:div.p-1
+     [:a {:href "/checkout/"
+          :class "bg-clj-green-light text-white p-2 inline-block rounded-lg flex items-end"}
+      icons/cart
+      (when (pos? basket-count)
+        [:span
+         {:class "text-xs relative left-0.5 top-1"} basket-count])]]
    (dropdown/dropdown
     first_name
     [[:a {:href "/"}
@@ -73,20 +82,21 @@
               :hx-target "#search-results"
               :_ "on click halt"
               :autocomplete "off"
-              :placeholder "Search..."}]
+              :placeholder "Search users and products..."}]
      [:div#search-results]]))
 
 (defcomponent ^:endpoint dashboard [req command]
   (case command
         (let [{:keys [first_name email]} (user/get-user req)
-              {:keys [description]} (profile/get-cv req)]
+              {:keys [description]} (profile/get-cv req)
+              basket-count (item-order/basket-count req)]
           [:div.min-h-screen.p-2 {:_ "on click add .hidden to .drop"}
            [:a.absolute.top-2.left-2 {:href ""}
             [:img.w-24 {:src "/logo.svg"}]]
            ;; search
            (search req)
            ;; dropdown
-           (main-dropdown first_name)
+           (main-dropdown basket-count first_name)
            ;; profile panel
            [:a {:href "/profile"}
             [:div.w-96.border.rounded-lg.absolute.top-20.left-10.p-1.text-gray-500
