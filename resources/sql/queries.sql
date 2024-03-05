@@ -43,7 +43,12 @@ select * from ratings;
 select * from ratings where user_id = :id and inventory_id = :item-id
 
 -- :name search-users :query
-select * from user where q like :q;
+select * from user where q like :q
 
 -- :name basket-count :query :one
 select count(*) as items from item_order where user_id = :id
+
+-- :name add-order :execute
+insert into item_order(user_id, inventory_id, quantity)
+values (:id, :inventory_id, 1)
+on conflict(user_id, inventory_id) do update set quantity = quantity + 1
