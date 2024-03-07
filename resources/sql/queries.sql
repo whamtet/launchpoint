@@ -52,3 +52,22 @@ select count(*) as items from item_order where user_id = :id
 insert into item_order(user_id, inventory_id, quantity)
 values (:id, :inventory_id, 1)
 on conflict(user_id, inventory_id) do update set quantity = quantity + 1
+
+-- :name my-order :query
+select * from item_order where user_id = :id
+
+-- :name inc-order :returning-execute
+update item_order
+set quantity = quantity + 1
+where user_id = :id and inventory_id = :inventory_id
+returning quantity
+
+-- :name dec-order :returning-execute
+update item_order
+set quantity = quantity - 1
+where user_id = :id and inventory_id = :inventory_id
+returning quantity
+
+-- :name del-order :execute
+delete from item_order
+where user_id = :id and inventory_id = :inventory_id

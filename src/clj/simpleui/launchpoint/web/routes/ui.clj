@@ -2,6 +2,7 @@
   (:require
    [simpleui.launchpoint.web.middleware.exception :as exception]
    [simpleui.launchpoint.web.middleware.formats :as formats]
+   [simpleui.launchpoint.web.views.checkout :as checkout]
    [simpleui.launchpoint.web.views.home :as home]
    [simpleui.launchpoint.web.views.item :as item]
    [simpleui.launchpoint.web.views.store :as store]
@@ -30,4 +31,5 @@
   [["" (route-data opts) (home/ui-routes opts)]
    ["/store" (route-data opts) (store/ui-routes opts)]
    ["/profile" (route-data opts) (profile/ui-routes opts)]
-   ["/item/:item-id" (route-data opts) (item/ui-routes opts)]])
+   ["/item/:item-id" (route-data opts) (item/ui-routes opts)]
+   ["/checkout" (route-data opts) (checkout/ui-routes opts)]])

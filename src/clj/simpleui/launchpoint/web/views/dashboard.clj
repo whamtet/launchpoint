@@ -23,12 +23,13 @@
 (defn main-dropdown [basket-count first_name]
   [:div.absolute.top-1.right-1.flex
    [:div.p-1
+    (if (pos? basket-count)
      [:a {:href "/checkout/"
           :class "bg-clj-green-light text-white p-2 inline-block rounded-lg flex items-end"}
       icons/cart
-      (when (pos? basket-count)
-        [:span
-         {:class "text-xs relative left-0.5 top-1"} basket-count])]]
+      [:span {:class "text-xs relative left-0.5 top-1"} basket-count]]
+     [:a {:class "bg-clj-green-light text-white p-2 inline-block rounded-lg flex items-end opacity-50"}
+      icons/cart])]
    (dropdown/dropdown
     first_name
     [[:a {:href "/"}
