@@ -4,6 +4,7 @@
     [simpleui.launchpoint.web.controllers.health :as health]
     [simpleui.launchpoint.web.controllers.login :as login]
     [simpleui.launchpoint.web.controllers.pdf :as pdf]
+    [simpleui.launchpoint.web.controllers.stripe :as stripe]
     [simpleui.launchpoint.web.htmx :refer [page-simple]]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
@@ -42,6 +43,12 @@
     {:get {:no-doc  true
            :swagger {:info {:title "simpleui.launchpoint API"}}
            :handler (swagger/create-swagger-handler)}}]
+   ["/stripe"
+    (fn [{:keys [session]}]
+      (-> session :id assert)
+      {:status 200
+       :headers {}
+       :body (stripe/client-secret)})]
    ["/logout"
     (fn [{:keys [session]}]
       (login/logout session))]

@@ -44,6 +44,15 @@
        (map #(* (:price %) (:quantity %)))
        (apply +)))
 
+(defn payment-form [orders]
+  [:form#payment-form.w-96.mx-auto
+   [:div#payment-element]
+   (components/h2 (i18n "Total") " $" (format$ (subtotal orders)))
+   [:button#submit {:class "mt-2 bg-clj-blue py-1.5 px-3 rounded-lg text-white"}
+     [:div#spinner.spinner.hidden]
+     [:span#button-text (i18n "Pay now")]]
+   [:div#payment-message.hidden]])
+
 (defcomponent ^:endpoint checkout [req command ^:long inventory_id]
   (iam/do-auth
    (case command
@@ -66,9 +75,12 @@
          [:table
           [:tbody
            (map checkout-row orders)]]
-         [:hr.my-2.border]
-         (components/h2 (i18n "Total") " " (format$ (subtotal orders)))]
-        (i18n "Checkout is empty"))]]))
+         [:hr.mt-3.border]
+         [:p.my-3.text-gray-700 (i18n "Try card 4242 4242 4242 4242")]
+         (payment-form orders)]
+        (i18n "Checkout is empty"))]
+     (when (simpleui/post? req)
+           [:script "initialize()"])]))
 
 (defn ui-routes [{:keys [query-fn]}]
   (simpleui/make-routes
@@ -78,6 +90,6 @@
      (if (-> req :session :id)
        (let [req (assoc req :query-fn query-fn)]
          (page-htmx
-          {:css ["/output.css"] :hyperscript? true}
+          {:css ["/output.css"] :hyperscript? true :stripe? true}
           (checkout req)))
        (response/redirect "/")))))

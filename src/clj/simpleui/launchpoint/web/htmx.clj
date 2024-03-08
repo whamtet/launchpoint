@@ -24,12 +24,19 @@
     (.replace s ".min" "")
     s))
 
-(defn page-htmx [{:keys [css js hyperscript?]} & body]
+(defn- scripts [js hyperscript? stripe?]
+  (cond-> js
+          hyperscript? (conj (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js"))
+          stripe? (conj "/checkout.js" "https://js.stripe.com/v3/")))
+
+(defn page-htmx [{:keys [css js hyperscript? stripe?]} & body]
   (page
    [:head
     [:meta {:charset "UTF-8"}]
     [:title (i18n "SimpleUI Launchpoint")]
     [:link {:rel "icon" :href "/logo_dark.svg"}]
+    (when stripe?
+          [:link {:rel "stylesheet" :href "/checkout.css"}])
     (for [sheet css]
       [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
    [:body
@@ -37,10 +44,10 @@
     [:script {:src
               (unminify "https://unpkg.com/htmx.org@1.9.5/dist/htmx.min.js")}]
     [:script "htmx.config.defaultSwapStyle = 'outerHTML';"]
-    (for [js js]
-      [:script {:src js}])
-    (when hyperscript?
-          [:script {:src (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js")}])]))
+    (map
+     (fn [src]
+       [:script {:src src}])
+     (scripts js hyperscript? stripe?))]))
 
 (defn page-simple [{:keys [css]} & body]
   (page

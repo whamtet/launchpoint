@@ -32,3 +32,6 @@
 (defn max-by [f s]
   (when (not-empty s)
         (apply max-key f s)))
+
+(defmacro defm [sym args & body]
+  `(def ~sym (memoize (fn ~args ~@body))))
