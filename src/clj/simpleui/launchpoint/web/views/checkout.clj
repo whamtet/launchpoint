@@ -75,7 +75,6 @@
         basket-count (item-order/basket-count req)]
     [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"
                             :hx-target "this"}
-     (i18n-script)
      [:a.absolute.top-3.left-3 {:href "/"}
       [:img.w-24 {:src "/logo.svg"}]]
      (dashboard/main-dropdown basket-count first_name)
@@ -83,15 +82,16 @@
       [:div.my-5 (components/h1 (i18n "Checkout"))]
       (if-let [orders (item-order/my-order req)]
         [:div
-         [:table
+         [:table.mx-auto
           [:tbody
            (map checkout-row orders)]]
          [:hr.mt-3.border]
          [:p.my-3.text-gray-700 (i18n "Try card 4242 4242 4242 4242")]
          (payment-form orders)]
         (i18n "Checkout is empty"))]
-     (when (simpleui/post? req)
-           [:script "initialize()"])]))
+     (if (simpleui/post? req)
+       [:script "initialize()"]
+       (i18n-script))]))
 
 (defn ui-routes [{:keys [query-fn]}]
   (simpleui/make-routes

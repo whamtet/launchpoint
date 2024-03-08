@@ -19,7 +19,7 @@
 
 (defmacro i18n-map [m]
   (assert (map? m))
-  (let [phrasesd (vals m)]
-    (assert (every? trimmed? phrasesd))
-    (alter-var-root #'phrases #(apply conj % phrasesd))
+  (let [new-phrases (vals m)]
+    (assert (every? trimmed? new-phrases))
+    (alter-var-root #'phrases #(apply conj % new-phrases))
     (json/write-str m)))

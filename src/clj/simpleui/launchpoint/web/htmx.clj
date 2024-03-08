@@ -27,7 +27,8 @@
 (defn- scripts [js hyperscript? stripe?]
   (cond-> js
           hyperscript? (conj (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js"))
-          stripe? (conj "/checkout.js" "https://js.stripe.com/v3/")))
+          stripe? (conj (resource-cache/cache-suffix "/checkout.js")
+                        "https://js.stripe.com/v3/")))
 
 (defn page-htmx [{:keys [css js hyperscript? stripe?]} & body]
   (page

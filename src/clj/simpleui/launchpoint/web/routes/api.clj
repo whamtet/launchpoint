@@ -2,6 +2,7 @@
   (:require
     [clojure.java.io :as io]
     [simpleui.launchpoint.web.controllers.health :as health]
+    [simpleui.launchpoint.web.controllers.item-order :as item-order]
     [simpleui.launchpoint.web.controllers.login :as login]
     [simpleui.launchpoint.web.controllers.pdf :as pdf]
     [simpleui.launchpoint.web.controllers.stripe :as stripe]
@@ -15,6 +16,9 @@
     [reitit.ring.middleware.muuntaja :as muuntaja]
     [reitit.ring.middleware.parameters :as parameters]
     [reitit.swagger :as swagger]))
+
+(defn- redirect [location]
+  {:status 302, :headers {"Location" location}, :body ""})
 
 (def route-data
   {:coercion   malli/coercion
@@ -49,6 +53,13 @@
       {:status 200
        :headers {}
        :body (stripe/client-secret)})]
+   ["/checkout"
+    (fn [req]
+      (-> req :session :id assert)
+      (redirect
+       (if-let [order-id (-> req (assoc :query-fn query-fn) item-order/complete-order)]
+         (str "/api/order/" order-id)
+         "/")))]
    ["/logout"
     (fn [{:keys [session]}]
       (login/logout session))]
@@ -62,6 +73,11 @@
     (fn [req]
       (page-simple {:css ["/output.css"]}
                    (profile-pdf (assoc req :query-fn query-fn))))]
+   ["/order/:order-id"
+    (fn [{:keys [path-params]}]
+      {:status 200
+       :headers {"Content-Type" "text/html"}
+       :body (:order-id path-params)})]
    ["/profile/pdf"
     (fn [{:keys [session headers]}]
       (assert (:id session))

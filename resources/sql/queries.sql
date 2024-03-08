@@ -71,3 +71,12 @@ returning quantity
 -- :name del-order :execute
 delete from item_order
 where user_id = :id and inventory_id = :inventory_id
+
+-- :name del-order-all :execute
+delete from item_order
+where user_id = :id
+
+-- :name finalize-order :returning-execute
+insert into orders(user_id, description)
+values (:id, :description)
+returning order_id
