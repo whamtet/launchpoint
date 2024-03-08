@@ -55,7 +55,7 @@ async function handleSubmit(e) {
     if (error.type === "card_error" || error.type === "validation_error") {
         showMessage(error.message);
     } else {
-        showMessage("An unexpected error occurred.");
+        showMessage("unexpected_error");
     }
 
     setLoading(false);
@@ -75,16 +75,16 @@ async function checkStatus() {
 
     switch (paymentIntent.status) {
         case "succeeded":
-            showMessage("Payment succeeded!");
+            showMessage("payment_succeeded");
             break;
         case "processing":
-            showMessage("Your payment is processing.");
+            showMessage("processing");
             break;
         case "requires_payment_method":
-            showMessage("Your payment was not successful, please try again.");
+            showMessage("requires_payment_method");
             break;
         default:
-            showMessage("Something went wrong.");
+            showMessage("wrong");
             break;
     }
 }
@@ -95,7 +95,7 @@ function showMessage(messageText) {
     const messageContainer = document.querySelector("#payment-message");
 
     messageContainer.classList.remove("hidden");
-    messageContainer.textContent = messageText;
+    messageContainer.textContent = i18n[messageText] || messageText;
 
     setTimeout(function () {
         messageContainer.classList.add("hidden");

@@ -1,4 +1,6 @@
-(ns simpleui.launchpoint.i18n)
+(ns simpleui.launchpoint.i18n
+    (:require
+      [clojure.data.json :as json]))
 
 (def phrases #{})
 
@@ -14,3 +16,10 @@
   (assert (every? trimmed? ss))
   (alter-var-root #'phrases #(apply conj % ss))
   (vec ss))
+
+(defmacro i18n-map [m]
+  (assert (map? m))
+  (let [phrasesd (vals m)]
+    (assert (every? trimmed? phrasesd))
+    (alter-var-root #'phrases #(apply conj % phrasesd))
+    (json/write-str m)))

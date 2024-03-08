@@ -1,7 +1,7 @@
 (ns simpleui.launchpoint.web.views.checkout
     (:require
       [simpleui.core :as simpleui]
-      [simpleui.launchpoint.i18n :refer [i18n]]
+      [simpleui.launchpoint.i18n :refer [i18n i18n-map]]
       [simpleui.launchpoint.web.controllers.iam :as iam]
       [simpleui.launchpoint.web.controllers.item-order :as item-order]
       [simpleui.launchpoint.web.controllers.user :as user]
@@ -53,6 +53,16 @@
      [:span#button-text (i18n "Pay now")]]
    [:div#payment-message.hidden]])
 
+(defn i18n-script []
+  [:script
+   (format "i18n = %s"
+           (i18n-map
+            {"unexpected_error" "An unexpected error occurred."
+             "payment_succeeded" "Payment succeeded!"
+             "processing" "Your payment is processing."
+             "requires_payment_method" "Your payment was not successful, please try again."
+             "wrong" "Something went wrong."}))])
+
 (defcomponent ^:endpoint checkout [req command ^:long inventory_id]
   (iam/do-auth
    (case command
@@ -65,6 +75,7 @@
         basket-count (item-order/basket-count req)]
     [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"
                             :hx-target "this"}
+     (i18n-script)
      [:a.absolute.top-3.left-3 {:href "/"}
       [:img.w-24 {:src "/logo.svg"}]]
      (dashboard/main-dropdown basket-count first_name)
