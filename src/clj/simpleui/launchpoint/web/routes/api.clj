@@ -9,6 +9,7 @@
     [simpleui.launchpoint.web.htmx :refer [page-simple]]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
+    [simpleui.launchpoint.web.views.checkout :as views.checkout]
     [simpleui.launchpoint.web.views.profile :refer [profile-pdf]]
     [integrant.core :as ig]
     [reitit.coercion.malli :as malli]
@@ -45,14 +46,17 @@
 (defn api-routes [{:keys [query-fn]}]
   [["/swagger.json"
     {:get {:no-doc  true
-           :swagger {:info {:title "simpleui.launchpoint API"}}
+           :swagger {:info {:title "simpleui.launchpoint API"
+                            :description "This isn't a true API.  See https://simpleui.io"}}
            :handler (swagger/create-swagger-handler)}}]
+   ;; stripe token
    ["/stripe"
     (fn [{:keys [session]}]
       (-> session :id assert)
       {:status 200
        :headers {}
        :body (stripe/client-secret)})]
+   ;; create a new order
    ["/checkout"
     (fn [req]
       (-> req :session :id assert)
@@ -63,21 +67,28 @@
    ["/logout"
     (fn [{:keys [session]}]
       (login/logout session))]
+   ;; company logo
    ["/company/:src"
     (fn [{:keys [session path-params]}]
       (-> session :id assert)
       {:status 200
        :headers {}
        :body (->> path-params :src (str "logos/") io/input-stream)})]
+   ;; self profile raw html
    ["/profile"
     (fn [req]
       (page-simple {:css ["/output.css"]}
                    (profile-pdf (assoc req :query-fn query-fn))))]
+   ["/order-raw/:order-id"
+    (fn [req]
+      (page-simple {:css ["/output.css"]}
+                   (views.checkout/order-summary (assoc req :query-fn query-fn))))]
    ["/order/:order-id"
-    (fn [{:keys [path-params]}]
+    (fn [{:keys [session headers path-params]}]
+      (assert (:id session))
       {:status 200
-       :headers {"Content-Type" "text/html"}
-       :body (:order-id path-params)})]
+       :headers {"Content-Type" "application/pdf"}
+       :body (-> "cookie" headers (pdf/pdf-order (:order-id path-params)))})]
    ["/profile/pdf"
     (fn [{:keys [session headers]}]
       (assert (:id session))

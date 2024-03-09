@@ -44,6 +44,15 @@
        (map #(* (:price %) (:quantity %)))
        (apply +)))
 
+(defn- order-summary-row [{:keys [title price quantity]}]
+  [:tr
+   [:td [:span.mx-7 title]]
+   [:td (format$ (* price quantity))]])
+(defn- final-row [orders]
+  [:tr {:class "border-t text-xl"}
+   [:td (i18n "Total")]
+   [:td (format$ (subtotal orders))]])
+
 (defn payment-form [orders]
   [:form#payment-form.w-96.mx-auto
    [:div#payment-element]
@@ -92,6 +101,15 @@
      (if (simpleui/post? req)
        [:script "initialize()"]
        (i18n-script))]))
+
+(defn order-summary [{{:keys [order-id]} :path-params :as req}]
+  (let [items (item-order/order1 req)]
+    [:div {:class "text-center"}
+     [:div.my-5 (components/h1 (i18n "Order Summary") " " (-> req :path-params :order-id))]
+     [:table
+      [:tbody
+       (map order-summary-row items)
+       (final-row items)]]]))
 
 (defn ui-routes [{:keys [query-fn]}]
   (simpleui/make-routes

@@ -80,3 +80,6 @@ where user_id = :id
 insert into orders(user_id, description)
 values (:id, :description)
 returning order_id
+
+-- :name order1 :query :one
+select description from orders where order_id = :order-id and user_id = :id

@@ -13,7 +13,7 @@
       (assoc :count 100 :q (.toLowerCase (:title m)))
       (update :rating set-rating)))
 
-(def ^:private items-raw
+(def items-raw
   (-> "store.json"
       io/resource
       slurp

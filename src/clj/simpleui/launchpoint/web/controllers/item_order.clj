@@ -7,6 +7,8 @@
 
 (defn- update-inventory [k {:keys [query-fn session]} inventory_id]
   (query-fn k (assoc session :inventory_id inventory_id)))
+(defn- update-order [k {:keys [query-fn session path-params]}]
+  (query-fn k (merge session path-params)))
 
 (defmacro defupdate [s]
   `(defn ~s [req# inventory_id#]
@@ -26,6 +28,16 @@
      (query-fn :my-order session)
      (map #(-> % :inventory_id items (merge %)))
      not-empty)))
+
+(defn order1 [req]
+  (->> req
+       (update-order :order1)
+       :description
+       read-string
+       (map (fn [{:keys [id price quantity]}]
+              {:price price
+               :quantity quantity
+               :title (get-in store/items-raw [id :title])}))))
 
 (defn complete-order [{:keys [query-fn session] :as req}]
   (when-let [order (my-order req)]
