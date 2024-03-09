@@ -39,6 +39,16 @@
                :quantity quantity
                :title (get-in store/items-raw [id :title])}))))
 
+(defn- subtotal [{:keys [order_id description]}]
+  (->> description
+       read-string
+       (map #(* (:price %) (:quantity %)))
+       (apply +)
+       (hash-map :order-id order_id :subtotal)))
+(defn order-subtotals [{:keys [query-fn session]}]
+  (map subtotal
+       (query-fn :complete-orders session)))
+
 (defn complete-order [{:keys [query-fn session] :as req}]
   (when-let [order (my-order req)]
     (let [order-id

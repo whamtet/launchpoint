@@ -10,7 +10,8 @@
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
-      [simpleui.launchpoint.web.views.icons :as icons]))
+      [simpleui.launchpoint.web.views.icons :as icons]
+      [simpleui.launchpoint.util :as util]))
 
 (defn gravatar
   ([^String email] (gravatar email 256))
@@ -86,23 +87,42 @@
               :placeholder "Search users and products..."}]
      [:div#search-results]]))
 
-(defcomponent ^:endpoint dashboard [req command]
-  (case command
-        (let [{:keys [first_name email]} (user/get-user req)
-              {:keys [description]} (profile/get-cv req)
-              basket-count (item-order/basket-count req)]
-          [:div.min-h-screen.p-2 {:_ "on click add .hidden to .drop"}
-           [:a.absolute.top-2.left-2 {:href ""}
-            [:img.w-24 {:src "/logo.svg"}]]
-           ;; search
-           (search req)
-           ;; dropdown
-           (main-dropdown basket-count first_name)
-           ;; profile panel
-           [:a {:href "/profile"}
-            [:div.w-96.border.rounded-lg.absolute.top-20.left-10.p-1.text-gray-500
-             [:div
-              [:img.mx-auto {:src (gravatar email)}]]
-             [:div.border-t.mt-2.p-2
-              description]]]
-           ])))
+(defn profile-panel [email description]
+  [:a {:href "/profile"}
+   [:div.w-96.border.rounded-lg.p-1.text-gray-500
+    [:div
+     [:img.mx-auto {:src (gravatar email)}]]
+    [:div.border-t.mt-2.p-2
+     description]]])
+
+(defn- order-row [{:keys [order-id subtotal]}]
+  [:tr
+   [:td
+    [:a {:href (str "/api/order/" order-id)
+         :target "_blank"} (i18n "Order") " " order-id]]
+   [:td
+    [:a {:href (str "/api/order/" order-id)
+         :target "_blank"} "$" (util/format$ subtotal)]]])
+(defn orders-panel [req]
+  [:div.w-96.border.rounded-lg.p-1.text-gray-500
+   [:div.p-1
+    (components/h2 (i18n "Orders"))]
+   [:div.border-t.mt-2.p-2
+    [:table.w-full
+     [:tbody
+      (map order-row (item-order/order-subtotals req))]]]])
+
+(defcomponent dashboard [req]
+  (let [{:keys [first_name email]} (user/get-user req)
+        {:keys [description]} (profile/get-cv req)
+        basket-count (item-order/basket-count req)]
+    [:div.min-h-screen.p-2 {:_ "on click add .hidden to .drop"}
+     [:a.absolute.top-2.left-2 {:href ""}
+      [:img.w-24 {:src "/logo.svg"}]]
+     ;; search
+     (search req)
+     ;; dropdown
+     (main-dropdown basket-count first_name)
+     [:div.flex.p-3.space-x-4
+      (profile-panel email description)
+      (orders-panel req)]]))

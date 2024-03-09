@@ -83,3 +83,6 @@ returning order_id
 
 -- :name order1 :query :one
 select description from orders where order_id = :order-id and user_id = :id
+
+-- :name complete-orders :query
+select order_id, description from orders where user_id = :id

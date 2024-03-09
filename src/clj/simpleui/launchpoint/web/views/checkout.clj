@@ -9,16 +9,13 @@
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.dashboard :as dashboard]
       [simpleui.response :as response]
-      [simpleui.launchpoint.util :as util]))
+      [simpleui.launchpoint.util :refer [format$]]))
 
 (defn button [label]
   [:span.p-1
    [:button {:type "button"
              :class "w-8 bg-clj-blue py-1.5 px-3 rounded-lg text-white"}
     label]])
-
-(defn- format$ [x]
-  (format "%.2f" x))
 
 (defn- checkout-row [{:keys [id title image price quantity]}]
   [:tr
@@ -106,6 +103,7 @@
   (let [items (item-order/order1 req)]
     [:div {:class "text-center"}
      [:div.my-5 (components/h1 (i18n "Order Summary") " " (-> req :path-params :order-id))]
+     [:div.h-12]
      [:table
       [:tbody
        (map order-summary-row items)

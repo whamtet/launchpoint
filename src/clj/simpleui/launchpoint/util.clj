@@ -35,3 +35,6 @@
 
 (defmacro defm [sym args & body]
   `(def ~sym (memoize (fn ~args ~@body))))
+
+(defn format$ [x]
+  (format "%.2f" x))
