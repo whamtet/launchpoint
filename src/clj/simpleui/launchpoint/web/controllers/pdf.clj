@@ -2,7 +2,13 @@
     (:require
         [clj-http.client :as client]
         [clojure.data.json :as json]
-        [simpleui.launchpoint.env :refer [prod?]]))
+        [clojure.java.io :as io]
+        [simpleui.launchpoint.env :refer [prod?]]
+        [simpleui.launchpoint.web.controllers.item-order :as item-order])
+    (:import
+      java.io.File))
+
+(.mkdir (File. "receipts"))
 
 (defn- ->multipart [m]
     (mapv
@@ -22,8 +28,8 @@
                         :extraHttpHeaders (json/write-str {:cookie cookie})})
                       :as :stream})))
 
-(defn pdf-order [cookie order-id]
-  (:body
+(defn- pdf-order* [f cookie order-id]
+  (->
     (client/post "http://localhost:3000/forms/chromium/convert/url"
                  {:multipart
                   (->multipart
@@ -31,4 +37,14 @@
                                  (if prod? "localhost" "host.docker.internal")
                                  order-id)
                     :extraHttpHeaders (json/write-str {:cookie cookie})})
-                  :as :stream})))
+                  :as :stream})
+   :body
+   (io/copy f)))
+
+(defn pdf-order [req cookie order-id]
+  (item-order/order1-owner? req)
+  (let [f (File. (format "receipts/%s.pdf" order-id))]
+    (when-not (.exists f)
+              (pdf-order* f cookie order-id))
+    (io/input-stream f)))
+

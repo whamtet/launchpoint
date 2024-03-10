@@ -84,11 +84,13 @@
       (page-simple {:css ["/output.css"]}
                    (views.checkout/order-summary (assoc req :query-fn query-fn))))]
    ["/order/:order-id"
-    (fn [{:keys [session headers path-params]}]
+    (fn [{:keys [session headers path-params] :as req}]
       (assert (:id session))
       {:status 200
        :headers {"Content-Type" "application/pdf"}
-       :body (-> "cookie" headers (pdf/pdf-order (:order-id path-params)))})]
+       :body (-> req
+                 (assoc :query-fn query-fn)
+                 (pdf/pdf-order (headers "cookie") (:order-id path-params)))})]
    ["/profile/pdf"
     (fn [{:keys [session headers]}]
       (assert (:id session))

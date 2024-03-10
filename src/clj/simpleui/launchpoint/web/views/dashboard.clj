@@ -102,7 +102,10 @@
          :target "_blank"} (i18n "Order") " " order-id]]
    [:td
     [:a {:href (str "/api/order/" order-id)
-         :target "_blank"} "$" (util/format$ subtotal)]]])
+         :target "_blank"} "$" (util/format$ subtotal)]]
+   [:td
+    [:a {:href (str "/api/order/" order-id)
+         :target "_blank"} "View"]]])
 (defn orders-panel [req]
   [:div.w-96.border.rounded-lg.p-1.text-gray-500
    [:div.p-1

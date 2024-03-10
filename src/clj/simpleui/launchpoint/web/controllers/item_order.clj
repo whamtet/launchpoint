@@ -39,6 +39,9 @@
                :quantity quantity
                :title (get-in store/items-raw [id :title])}))))
 
+(defn order1-owner? [req]
+  (assert (update-order :order1 req)))
+
 (defn- subtotal [{:keys [order_id description]}]
   (->> description
        read-string
