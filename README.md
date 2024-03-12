@@ -1,8 +1,25 @@
 # launchpoint
 
-Demo [SimpleUI](https://simpleui.io) app with open source components.
+Demo [SimpleUI](https://simpleui.io) app with open source components.  From here developing a custom app is very straightforward.
 
 ## Usage
+
+### Account Creation
+
+Register your account and a dashboard will appear.  Click the profile pic to edit your CV.
+Save typing by importing your profile directly from LinkedIn
+
+![](usage/profile.png)
+
+### Shopping
+
+Search for people or items using the omnibar at the top of the dashboard.
+
+![](usage/search.png)
+
+Purchase items on the results page. The checkout is connected to a test Stripe account which accepts card `4242 4242 4242 4242`. 
+
+## Developer Usage
 
 Start a [REPL](#repls) in your editor or terminal of choice.
 

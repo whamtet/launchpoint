@@ -22,7 +22,11 @@
                  size))))
 
 (defn main-dropdown [basket-count first_name]
-  [:div.absolute.top-1.right-1.flex
+  [:div.absolute.top-1.right-1.flex.items-center
+   [:div.p-1
+    [:a {:href "https://github.com/whamtet/launchpoint"
+         :target "_blank"}
+     [:img.w-8.opacity-70 {:src "/github-mark.png"}]]]
    [:div.p-1
     (if (pos? basket-count)
      [:a {:href "/checkout/"

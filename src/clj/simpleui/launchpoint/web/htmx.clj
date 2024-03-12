@@ -58,6 +58,13 @@
       [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
    [:body (render/walk-attrs body)]))
 
+(defn redirect-tab [r1 r2]
+  (page
+    [:body
+     [:script
+      (format "if (open('%s')) {location = '%s'}" r1 r2)]
+     (i18n "Please allow popups then refresh this page.")]))
+
 (defmacro defcomponent
   [name [req :as args] & body]
   (if-let [sym (simpleui/symbol-or-as req)]

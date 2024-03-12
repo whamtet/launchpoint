@@ -6,7 +6,7 @@
     [simpleui.launchpoint.web.controllers.login :as login]
     [simpleui.launchpoint.web.controllers.pdf :as pdf]
     [simpleui.launchpoint.web.controllers.stripe :as stripe]
-    [simpleui.launchpoint.web.htmx :refer [page-simple]]
+    [simpleui.launchpoint.web.htmx :refer [page-simple redirect-tab]]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
     [simpleui.launchpoint.web.views.checkout :as views.checkout]
@@ -61,9 +61,14 @@
     (fn [req]
       (-> req :session :id assert)
       (redirect
-       (if-let [order-id (-> req (assoc :query-fn query-fn) item-order/complete-order)]
-         (str "/api/order/" order-id)
-         "/")))]
+        (if-let [order-id (-> req (assoc :query-fn query-fn) item-order/complete-order)]
+          (str "/api/checkout/complete/" order-id)
+          "/api/checkout/complete/1")))]
+   ["/checkout/complete/:order-id"
+    (fn [req]
+      (redirect-tab
+       (->> req :path-params :order-id (str "/api/order/"))
+       "/"))]
    ["/logout"
     (fn [{:keys [session]}]
       (login/logout session))]

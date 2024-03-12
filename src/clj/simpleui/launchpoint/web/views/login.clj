@@ -46,6 +46,9 @@
     [:img.w-24 {:src "/logo.svg"}]]
    [:div.text-center
     (components/h1 (i18n "SimpleUI Launchpoint"))]
+   [:a.absolute.top-3.right-3 {:href "https://github.com/whamtet/launchpoint"
+                               :target "_blank"}
+    [:img.w-8.opacity-70 {:src "/github-mark.png"}]]
    [:div {:class "mt-12
    mx-auto w-1/2
    border rounded-lg overflow-hidden"}
