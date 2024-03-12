@@ -55,8 +55,8 @@
 
   (tmp/rm)
   ;; start
-  ((or (:start params) (:start defaults) (fn [])))
-  (->> (config/system-config (or (:opts params) (:opts defaults) {}))
+  ((or (:start defaults) (fn [])))
+  (->> (config/system-config (or (:opts defaults) {}))
        (ig/prep)
        (ig/init)
        (reset! system)))
@@ -74,4 +74,5 @@
     (qs/schedule s job trigger)))
 
 (defn -main [& _]
-  (start-app))
+  (start-app)
+  (schedule))
