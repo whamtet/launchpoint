@@ -32,6 +32,7 @@
                     :git/sha "c53e003ace5d1719d9fcef6cbaab8b0656a0b347"}
            clj-http/clj-http {:mvn/version "3.12.3"}
            com.stripe/stripe-java {:mvn/version "24.18.0"}
+           clojurewerkz/quartzite {:mvn/version "2.2.0"}
  io.github.kit-clj/kit-nrepl {:mvn/version "1.0.1"}}
  :aliases {:build {:deps {io.github.clojure/tools.build {:git/sha "24f2894"
                                                          :git/tag "v0.9.5" :git/url "https://github.com/clojure/tools.build.git"}}
