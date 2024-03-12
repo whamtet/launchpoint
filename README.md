@@ -1,8 +1,10 @@
-# launchpoint
+# SimpleUI launchpoint
 
 Demo [SimpleUI](https://simpleui.io) app with open source components.  From here developing a custom app is very straightforward.
 
 ## Usage
+
+Visit [launchpoint.simpleui.io](https://launchpoint.simpleui.io) or run locally using the instructions below.
 
 ### Account Creation
 
@@ -11,11 +13,18 @@ Save typing by importing your profile directly from LinkedIn
 
 ![](usage/profile.png)
 
+### Users
+
+Search for users using the omnibar at the top of the main dashboard.
+Click on search results to view their impressive resumes.
+
+![](usage/user.png)
+
 ### Shopping
 
-Search for people or items using the omnibar at the top of the dashboard.
+Search for shop items using the omnibar at the top of the dashboard.
 
-![](usage/search.png)
+![](usage/shopping.png)
 
 Purchase items on the results page. The checkout is connected to a test Stripe account which accepts card `4242 4242 4242 4242`. 
 

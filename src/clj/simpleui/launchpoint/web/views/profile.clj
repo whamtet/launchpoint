@@ -94,7 +94,7 @@
                    :hx-vals {:first_name first_name
                              :last_name last_name}}
           (components/button (i18n "Edit"))]
-         [:a.ml-2 {:href "/api/profile/pdf"
+         [:a.ml-2 {:href "/api/profile-pdf"
                    :target "_blank"}
           (components/button (i18n "View PDF"))]
          (import-modal req)]))

@@ -31,7 +31,7 @@ on conflict(item_id) do update set count = :count
 -- :name update-names :execute
 update user
 set first_name = :first_name, last_name = :last_name
-where id = :id
+where user_id = :id
 
 -- :name inventory-all :query
 select * from inventory;

@@ -63,7 +63,7 @@
       (redirect
         (if-let [order-id (-> req (assoc :query-fn query-fn) item-order/complete-order)]
           (str "/api/checkout/complete/" order-id)
-          "/api/checkout/complete/1")))]
+          "/")))]
    ["/checkout/complete/:order-id"
     (fn [req]
       (redirect-tab
@@ -84,6 +84,10 @@
     (fn [req]
       (page-simple {:css ["/output.css"]}
                    (profile-pdf (assoc req :query-fn query-fn))))]
+   ["/profile/:user-id"
+    (fn [req]
+      (page-simple {:css ["/output.css"]}
+                   (profile-pdf (assoc req :query-fn query-fn))))]
    ["/order-raw/:order-id"
     (fn [req]
       (page-simple {:css ["/output.css"]}
@@ -96,12 +100,18 @@
        :body (-> req
                  (assoc :query-fn query-fn)
                  (pdf/pdf-order (headers "cookie") (:order-id path-params)))})]
-   ["/profile/pdf"
-    (fn [{:keys [session headers]}]
+   ["/profile-pdf"
+    (fn [{:keys [session headers path-params]}]
       (assert (:id session))
       {:status 200
        :headers {"Content-Type" "application/pdf"}
-       :body (-> "cookie" headers pdf/pdf-profile)})]
+       :body (pdf/pdf-order (headers "cookie") nil)})]
+   ["/profile-pdf/:user-id"
+    (fn [{:keys [session headers path-params]}]
+      (assert (:id session))
+      {:status 200
+       :headers {"Content-Type" "application/pdf"}
+       :body (pdf/pdf-order (headers "cookie") (:user-id path-params))})]
    ["/health"
     {:get health/healthcheck!}]])
 

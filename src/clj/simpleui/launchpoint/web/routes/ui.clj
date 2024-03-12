@@ -7,6 +7,7 @@
    [simpleui.launchpoint.web.views.item :as item]
    [simpleui.launchpoint.web.views.store :as store]
    [simpleui.launchpoint.web.views.profile :as profile]
+   [simpleui.launchpoint.web.views.user :as user]
    [integrant.core :as ig]
    [reitit.ring.middleware.muuntaja :as muuntaja]
    [reitit.ring.middleware.parameters :as parameters]))
@@ -31,5 +32,6 @@
   [["" (route-data opts) (home/ui-routes opts)]
    ["/store" (route-data opts) (store/ui-routes opts)]
    ["/profile" (route-data opts) (profile/ui-routes opts)]
+   ["/user/:user-id" (route-data opts) (user/ui-routes opts)]
    ["/item/:item-id" (route-data opts) (item/ui-routes opts)]
    ["/checkout" (route-data opts) (checkout/ui-routes opts)]])

@@ -18,13 +18,14 @@
 
 ;; docker run --rm --net=host -d gotenberg/gotenberg:8
 ;; docker run --rm -d -p 3000:3000 gotenberg/gotenberg:8
-(defn pdf-profile [cookie]
+(defn pdf-profile [cookie user-id]
     (:body
         (client/post "http://localhost:3000/forms/chromium/convert/url"
                      {:multipart
                       (->multipart
-                       {:url (format "http://%s:3001/api/profile"
-                                     (if prod? "localhost" "host.docker.internal"))
+                       {:url (format "http://%s:3001/api/profile%s"
+                                     (if prod? "localhost" "host.docker.internal")
+                                     (if user-id (str "/" user-id) ""))
                         :extraHttpHeaders (json/write-str {:cookie cookie})})
                       :as :stream})))
 
