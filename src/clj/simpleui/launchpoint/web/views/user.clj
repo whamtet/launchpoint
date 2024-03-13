@@ -9,37 +9,40 @@
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.dashboard :as dashboard :refer [gravatar]]
       [simpleui.launchpoint.web.views.profile.history :refer [months]]
+      [simpleui.launchpoint.util :as util]
       [simpleui.response :as response]))
 
 (defn- pic [email]
-  [:div.m-2.border.rounded-lg.inline-block.overflow-hidden.relative
+  [:div.my-3.border.rounded-lg.inline-block.overflow-hidden.relative
    [:img {:src (gravatar email)}]])
 
-(defn- names [user_id first_name last_name]
+(defn- names [user_id first_name last_name pdf?]
   [:div
    [:span.text-2xl first_name " " last_name]
-   [:a.ml-2 {:href (str "/api/profile-pdf/" user_id)
-             :target "_blank"}
-    (components/button (i18n "View PDF"))]])
+   (when-not pdf?
+             [:a.ml-2 {:href (str "/api/profile-pdf/" user_id)
+                       :target "_blank"}
+              (components/button (i18n "View PDF"))])])
 
 (defn- description-section [description]
   [:div
-   (components/h3 (i18n "Description"))
+   [:div.text-center
+    (components/h3 (i18n "Description"))]
    [:div
-    {:class "my-3 w-3/4"} description]])
+    {:class "my-3"} description]])
 
 (defn- work-history [jobs]
-  [:div.p-1
-   (map-indexed
-    (fn [i {:keys [title
-                   company src
-                   present
-                   from-year from-month
-                   to-year to-month
-                   description] :as job}]
+  [:div {:class "w-3/4"}
+   (util/map-last
+    (fn [last? {:keys [title
+                       company src
+                       present
+                       from-year from-month
+                       to-year to-month
+                       description] :as job}]
       [:div
-       [:div.my-1.flex.items-center
-        (components/h2 title)]
+       [:div.my-1
+        (components/h3 title)]
        [:div.flex.items-center.my-1
         [:span.mr-4.text-lg company]
         (when src [:img.w-9 {:src (str "/api/company/" src)}])]
@@ -49,39 +52,50 @@
           (i18n "Present")
           [:span ((months) to-month) " " to-year])]
        [:div.my-2 description]
-       [:hr {:class "border w-1/2"}]])
+       (when-not last? [:hr {:class "my-3 border w-1/2"}])])
     jobs)])
 
 (defn- education-history [education]
-  [:div.p-1
-   (map-indexed
-    (fn [i {:keys [degree institution year] :as education}]
-      [:div {:hx-target "this"}
-       [:div.my-1.flex.items-center
-        (components/h2 degree)]
+  [:div {:class "my-3 w-3/4"}
+   (util/map-last
+    (fn [last? {:keys [degree institution year] :as education}]
+      [:div
+       [:div.my-1
+        [:span.text-lg degree]]
        [:div.my-1
         [:span.text-lg institution]]
        [:div.my-1 year]
-       [:hr {:class "border w-1/2"}]])
+       (when-not last? [:hr {:class "my-3 border w-1/2"}])])
     education)])
 
-(defn- profile [req]
+[:div {:class "w-2/3"}]
+(defn- page-width [style pdf?]
+  (if pdf?
+    style
+    (str style " " "w-2/3")))
+
+(defn profile [req pdf?]
   (let [{:keys [first_name last_name email]} (user/get-user req)
         {{:keys [user-id]} :path-params} req
         {:keys [description jobs education]} (profile/get-cv req)
         basket-count (item-order/basket-count req)]
     [:div.min-h-screen.p-1 {:_ "on click add .hidden to .drop"}
-     [:a.absolute.top-3.left-3 {:href "/"}
-      [:img.w-24 {:src "/logo.svg"}]]
-     (dashboard/main-dropdown basket-count first_name)
-     [:div {:class "w-2/3 mx-auto"}
+     (when-not pdf?
+               (list
+                [:a.absolute.top-3.left-3 {:href "/"}
+                 [:img.w-24 {:src "/logo.svg"}]]
+                (dashboard/main-dropdown basket-count first_name)))
+     [:div {:class (page-width "mx-auto
+     border border-gray-300 rounded-md shadow-xl
+     flex flex-col items-center" pdf?)}
       (pic email)
-      (names user-id first_name last_name)
+      (names user-id first_name last_name pdf?)
       [:hr.w-96.my-6.border]
       (description-section description)
       (components/h3 (i18n "Work History"))
       (work-history jobs)
-      (components/h3 (i18n "Education"))
+      [:div.mt-3
+       (components/h3 (i18n "Education"))]
       (education-history education)
       ]]))
 
@@ -94,5 +108,5 @@
        (let [req (assoc req :query-fn query-fn)]
          (page-htmx
           {:css ["/output.css"] :hyperscript? true}
-          (profile req)))
+          (profile req false)))
        (response/redirect "/")))))

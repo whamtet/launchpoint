@@ -67,11 +67,6 @@
                   :hx-target "#modal"}
          (components/button (i18n "Import from LinkedIn"))]))
 
-(defn- pic-pdf [email]
-  [:a
-   [:div.m-2.border.rounded-lg.inline-block.overflow-hidden.relative
-    [:img {:src (gravatar email)}]]])
-
 (defcomponent ^:endpoint names [req first_name last_name command]
   (when (= "save" command)
         (user/update-names req first_name last_name))
@@ -98,10 +93,6 @@
                    :target "_blank"}
           (components/button (i18n "View PDF"))]
          (import-modal req)]))
-
-(defn- names-pdf [first_name last_name]
-  [:div
-   [:span.text-2xl first_name " " last_name]])
 
 (defcomponent ^:endpoint description-section [req description]
   (if top-level?
@@ -136,22 +127,6 @@
       (components/h3 (i18n "Education"))
       (profile.history/new-education req)
       (profile.history/education-history req education false)
-      ]]))
-
-(defn profile-pdf [req]
-  (let [{:keys [first_name last_name email]} (user/get-user req)
-        {:keys [description jobs education]} (profile/get-cv req)]
-    [:div.p-1
-     [:div {:class "w-2/3 mx-auto"}
-      (pic-pdf email)
-      (names-pdf first_name last_name)
-      [:hr.w-96.my-6.border]
-      ;;description
-      [:div description]
-      (components/h3 (i18n "Work History"))
-      (profile.history/work-history req jobs true)
-      (components/h3 (i18n "Education"))
-      (profile.history/education-history req education true)
       ]]))
 
 (defn ui-routes [{:keys [query-fn]}]

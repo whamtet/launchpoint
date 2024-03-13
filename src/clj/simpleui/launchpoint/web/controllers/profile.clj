@@ -7,10 +7,13 @@
 (defn- upsert [{:keys [session query-fn]} cv]
   (query-fn :upsert-cv (assoc session :cv (pr-str cv))))
 
-(defn get-cv [{:keys [session query-fn]}]
-  (some-> (query-fn :get-cv session)
-          :cv
-          read-string))
+(defn get-cv [{:keys [session query-fn path-params]}]
+  (let [params (if-let [user-id (:user-id path-params)]
+                 {:id user-id}
+                 session)]
+    (some-> (query-fn :get-cv params)
+            :cv
+            read-string)))
 
 (defn- update-cv [req f & args]
   (->> (apply f (get-cv req) args)

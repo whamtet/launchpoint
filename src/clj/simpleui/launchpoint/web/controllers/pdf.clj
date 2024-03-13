@@ -25,7 +25,9 @@
                       (->multipart
                        {:url (format "http://%s:3001/api/profile%s"
                                      (if prod? "localhost" "host.docker.internal")
-                                     (if user-id (str "/" user-id) ""))
+                                     (if user-id
+                                       (str "/" user-id)
+                                       ""))
                         :extraHttpHeaders (json/write-str {:cookie cookie})})
                       :as :stream})))
 

@@ -38,3 +38,7 @@
 
 (defn format$ [x]
   (format "%.2f" x))
+
+(defn map-last [f s]
+  (let [c (dec (count s))]
+    (map-indexed #(f (= %1 c) %2) s)))

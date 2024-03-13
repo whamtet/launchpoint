@@ -10,7 +10,7 @@
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
     [simpleui.launchpoint.web.views.checkout :as views.checkout]
-    [simpleui.launchpoint.web.views.profile :refer [profile-pdf]]
+    [simpleui.launchpoint.web.views.user :as views.user]
     [integrant.core :as ig]
     [reitit.coercion.malli :as malli]
     [reitit.ring.coercion :as coercion]
@@ -83,11 +83,11 @@
    ["/profile"
     (fn [req]
       (page-simple {:css ["/output.css"]}
-                   (profile-pdf (assoc req :query-fn query-fn))))]
+                   (views.user/profile (assoc req :query-fn query-fn) true)))]
    ["/profile/:user-id"
     (fn [req]
       (page-simple {:css ["/output.css"]}
-                   (profile-pdf (assoc req :query-fn query-fn))))]
+                   (views.user/profile (assoc req :query-fn query-fn) true)))]
    ["/order-raw/:order-id"
     (fn [req]
       (page-simple {:css ["/output.css"]}
@@ -105,13 +105,13 @@
       (assert (:id session))
       {:status 200
        :headers {"Content-Type" "application/pdf"}
-       :body (pdf/pdf-order (headers "cookie") nil)})]
+       :body (pdf/pdf-profile (headers "cookie") nil)})]
    ["/profile-pdf/:user-id"
     (fn [{:keys [session headers path-params]}]
       (assert (:id session))
       {:status 200
        :headers {"Content-Type" "application/pdf"}
-       :body (pdf/pdf-order (headers "cookie") (:user-id path-params))})]
+       :body (pdf/pdf-profile (headers "cookie") (:user-id path-params))})]
    ["/health"
     {:get health/healthcheck!}]])
 

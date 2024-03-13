@@ -1,8 +1,11 @@
 (ns simpleui.launchpoint.web.controllers.user)
 
 (defn get-user
-  ([{:keys [query-fn session]}]
-   (query-fn :get-user session))
+  ([{:keys [query-fn session path-params]}]
+   (query-fn :get-user
+             (if-let [user-id (:user-id path-params)]
+               {:id user-id}
+               session)))
   ([{:keys [query-fn]} id]
    (query-fn :get-user {:id id})))
 
