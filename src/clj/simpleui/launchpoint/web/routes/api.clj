@@ -1,6 +1,8 @@
 (ns simpleui.launchpoint.web.routes.api
   (:require
     [clojure.java.io :as io]
+    [simpleui.launchpoint.env :refer [dev?]]
+    [simpleui.launchpoint.web.controllers.delete :as delete]
     [simpleui.launchpoint.web.controllers.health :as health]
     [simpleui.launchpoint.web.controllers.item-order :as item-order]
     [simpleui.launchpoint.web.controllers.login :as login]
@@ -44,76 +46,83 @@
 
 ;; Routes
 (defn api-routes [{:keys [query-fn]}]
-  [["/swagger.json"
-    {:get {:no-doc  true
-           :swagger {:info {:title "simpleui.launchpoint API"
-                            :description "This isn't a true API.  See https://simpleui.io"}}
-           :handler (swagger/create-swagger-handler)}}]
-   ;; stripe token
-   ["/stripe"
-    (fn [{:keys [session]}]
-      (-> session :id assert)
-      {:status 200
-       :headers {}
-       :body (stripe/client-secret)})]
-   ;; create a new order
-   ["/checkout"
-    (fn [req]
-      (-> req :session :id assert)
-      (redirect
+  (cond->
+   [["/swagger.json"
+     {:get {:no-doc  true
+            :swagger {:info {:title "simpleui.launchpoint API"
+                             :description "This isn't a true API.  See https://simpleui.io"}}
+            :handler (swagger/create-swagger-handler)}}]
+    ;; stripe token
+    ["/stripe"
+     (fn [{:keys [session]}]
+       (-> session :id assert)
+       {:status 200
+        :headers {}
+        :body (stripe/client-secret)})]
+    ;; create a new order
+    ["/checkout"
+     (fn [req]
+       (-> req :session :id assert)
+       (redirect
         (if-let [order-id (-> req (assoc :query-fn query-fn) item-order/complete-order)]
           (str "/api/checkout/complete/" order-id)
           "/")))]
-   ["/checkout/complete/:order-id"
-    (fn [req]
-      (redirect-tab
-       (->> req :path-params :order-id (str "/api/order/"))
-       "/"))]
-   ["/logout"
-    (fn [{:keys [session]}]
-      (login/logout session))]
-   ;; company logo
-   ["/company/:src"
-    (fn [{:keys [session path-params]}]
-      (-> session :id assert)
-      {:status 200
-       :headers {}
-       :body (->> path-params :src (str "logos/") io/input-stream)})]
-   ;; self profile raw html
-   ["/profile"
-    (fn [req]
-      (page-simple {:css ["/output.css"]}
-                   (views.user/profile (assoc req :query-fn query-fn) true)))]
-   ["/profile/:user-id"
-    (fn [req]
-      (page-simple {:css ["/output.css"]}
-                   (views.user/profile (assoc req :query-fn query-fn) true)))]
-   ["/order-raw/:order-id"
-    (fn [req]
-      (page-simple {:css ["/output.css"]}
-                   (views.checkout/order-summary (assoc req :query-fn query-fn))))]
-   ["/order/:order-id"
-    (fn [{:keys [session headers path-params] :as req}]
-      (assert (:id session))
-      {:status 200
-       :headers {"Content-Type" "application/pdf"}
-       :body (-> req
-                 (assoc :query-fn query-fn)
-                 (pdf/pdf-order (headers "cookie") (:order-id path-params)))})]
-   ["/profile-pdf"
-    (fn [{:keys [session headers path-params]}]
-      (assert (:id session))
-      {:status 200
-       :headers {"Content-Type" "application/pdf"}
-       :body (pdf/pdf-profile (headers "cookie") nil)})]
-   ["/profile-pdf/:user-id"
-    (fn [{:keys [session headers path-params]}]
-      (assert (:id session))
-      {:status 200
-       :headers {"Content-Type" "application/pdf"}
-       :body (pdf/pdf-profile (headers "cookie") (:user-id path-params))})]
-   ["/health"
-    {:get health/healthcheck!}]])
+    ["/checkout/complete/:order-id"
+     (fn [req]
+       (redirect-tab
+        (->> req :path-params :order-id (str "/api/order/"))
+        "/"))]
+    ["/logout"
+     (fn [{:keys [session]}]
+       (login/logout session))]
+    ;; company logo
+    ["/company/:src"
+     (fn [{:keys [session path-params]}]
+       (-> session :id assert)
+       {:status 200
+        :headers {}
+        :body (->> path-params :src (str "logos/") io/input-stream)})]
+    ;; self profile raw html
+    ["/profile"
+     (fn [req]
+       (page-simple {:css ["/output.css"]}
+                    (views.user/profile (assoc req :query-fn query-fn) true)))]
+    ["/profile/:user-id"
+     (fn [req]
+       (page-simple {:css ["/output.css"]}
+                    (views.user/profile (assoc req :query-fn query-fn) true)))]
+    ["/order-raw/:order-id"
+     (fn [req]
+       (page-simple {:css ["/output.css"]}
+                    (views.checkout/order-summary (assoc req :query-fn query-fn))))]
+    ["/order/:order-id"
+     (fn [{:keys [session headers path-params] :as req}]
+       (assert (:id session))
+       {:status 200
+        :headers {"Content-Type" "application/pdf"}
+        :body (-> req
+                  (assoc :query-fn query-fn)
+                  (pdf/pdf-order (headers "cookie") (:order-id path-params)))})]
+    ["/profile-pdf"
+     (fn [{:keys [session headers path-params]}]
+       (assert (:id session))
+       {:status 200
+        :headers {"Content-Type" "application/pdf"}
+        :body (pdf/pdf-profile (headers "cookie") nil)})]
+    ["/profile-pdf/:user-id"
+     (fn [{:keys [session headers path-params]}]
+       (assert (:id session))
+       {:status 200
+        :headers {"Content-Type" "application/pdf"}
+        :body (pdf/pdf-profile (headers "cookie") (:user-id path-params))})]
+    ["/health"
+     {:get health/healthcheck!}]]
+   dev? (conj ["/user/:user-id"
+               (fn [req]
+                 (-> req (assoc :query-fn query-fn) delete/delete-user)
+                 {:status 200
+                  :headers {"Content-Type" "text/html"}
+                  :body "ok"})])))
 
 (derive :reitit.routes/api :reitit/routes)
 

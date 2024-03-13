@@ -46,7 +46,7 @@
  {:routes #ig/ref :router/routes}
  :db.sql/query-fn {:conn #ig/ref :db.sql/connection,
                    :options {},
-                   :filename "sql/queries.sql"}
+                   :filenames ["sql/queries.sql" "sql/queries-delete.sql"]}
  :db.sql/migrations {:store :database,
                      :db {:datasource #ig/ref :db.sql/connection},
                      :migrate-on-init? true}
