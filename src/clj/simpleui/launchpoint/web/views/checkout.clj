@@ -101,7 +101,7 @@
 
 (defn order-summary [{{:keys [order-id]} :path-params :as req}]
   (let [items (item-order/order1 req)]
-    [:div {:class "text-center"}
+    [:div {:class "text-center flex flex-col items-center"}
      [:div.my-5 (components/h1 (i18n "Order Summary") " " (-> req :path-params :order-id))]
      [:div.h-12]
      [:table
