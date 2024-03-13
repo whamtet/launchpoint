@@ -25,7 +25,7 @@
    (components/submit (i18n "Login"))])
 
 (defn- registration-form [first-name last-name email problem]
-  [:form.py-3 {:hx-post "login:register"}
+  [:form#registration-form.py-3 {:hx-post "login:register"}
    (components/hidden "register" true)
    (components/text (i18n "First name") "first-name" first-name :required)
    (components/text (i18n "Last name") "last-name" last-name :required)
@@ -57,10 +57,10 @@
           :hx-get "login"
           :class (highlight "w-1/2 border-r p-1" (not register))}
       (i18n "Login")]
-     [:a {:href ""
-          :hx-get "login"
-          :hx-vals {:register true}
-          :class (highlight "w-1/2 p-1" register)}
+     [:a#register {:href ""
+                   :hx-get "login"
+                   :hx-vals {:register true}
+                   :class (highlight "w-1/2 p-1" register)}
       (i18n "Register")]]
     (if register
       (registration-form first-name last-name email problem)
