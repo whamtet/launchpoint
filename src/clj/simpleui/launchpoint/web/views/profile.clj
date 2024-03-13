@@ -83,7 +83,7 @@
                   :required true}]
          (components/submit-inline (i18n "Save"))]
         [:div {:hx-target "this"}
-         [:span.text-2xl first_name " " last_name]
+         [:span#names.text-2xl first_name " " last_name]
          [:a.ml-2 {:href "#"
                    :hx-get "names:edit"
                    :hx-vals {:first_name first_name

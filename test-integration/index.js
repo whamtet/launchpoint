@@ -1,14 +1,14 @@
 const puppeteer = require('puppeteer');
 const {assert} = require('chai');
 
+const {typeInput, clickValue} = require('./util');
+const {profile} = require('./profile');
+
 const prepare = async () => {
   // delete test user
   const response = await fetch('http://localhost:3001/api/user/2');
   assert.equal(response.status, 200);
 };
-
-const typeInput = (page, name, text) => page.type(`input[name="${name}"]`, text);
-const clickValue = (page, name) => page.click(`input[value="${name}"]`);
 
 async function register(page) {
 
@@ -21,7 +21,8 @@ async function register(page) {
   await typeInput(page, 'password', 'asdf1234');
   await typeInput(page, 'password2', 'asdf1234');
 
-  clickValue(page, 'Register');
+  await clickValue(page, 'Register');
+  await page.waitForNavigation();
 
 }
 
@@ -37,6 +38,8 @@ async function register(page) {
   await page.setViewport({width: 1440, height: 1024});
 
   await register(page);
+
+  await profile(page);
 
   // console.log('all tests passed');
 
