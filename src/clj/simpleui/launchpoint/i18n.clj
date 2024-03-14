@@ -1,6 +1,7 @@
 (ns simpleui.launchpoint.i18n
     (:require
-      [clojure.data.json :as json]))
+      [clojure.data.json :as json]
+      [clojure.string :as string]))
 
 (def phrases #{})
 
@@ -23,3 +24,10 @@
     (assert (every? trimmed? new-phrases))
     (alter-var-root #'phrases #(apply conj % new-phrases))
     (json/write-str m)))
+
+(defn spit-phrases []
+  (->> phrases
+       sort
+       (map #(str % "\n"))
+       (string/join "\n")
+       (spit "i18n.txt")))

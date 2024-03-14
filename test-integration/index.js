@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const {assert} = require('chai');
 
-const {typeInput, clickValue} = require('./util');
+const {typeInput, clickInput} = require('./util');
 const {profile} = require('./profile');
 
 const prepare = async () => {
@@ -21,7 +21,7 @@ async function register(page) {
   await typeInput(page, 'password', 'asdf1234');
   await typeInput(page, 'password2', 'asdf1234');
 
-  await clickValue(page, 'Register');
+  await clickInput(page, 'Register');
   await page.waitForNavigation();
 
 }

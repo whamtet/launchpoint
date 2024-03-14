@@ -265,10 +265,14 @@
          [:span.mr-4.text-lg company]
          (when src [:img.w-9 {:src (str "/api/company/" src)}])]
         [:div.my-1
-         ((months) from-month) " " from-year " - "
-         (if present
-           (i18n "Present")
-           [:span ((months) to-month) " " to-year])]
+         (if (pos? from-month)
+           (list ((months) from-month) " " from-year " - ")
+           (list from-year " - "))
+         (cond
+           present (i18n "Present")
+           (pos? to-month)
+           [:span ((months) to-month) " " to-year]
+           :else to-year)]
         [:div.my-2 description]
         [:hr {:class "border w-1/2"}]])
      jobs)])

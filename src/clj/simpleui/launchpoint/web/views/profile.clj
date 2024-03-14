@@ -98,7 +98,7 @@
   (if top-level?
     (do (profile/update-description req description) nil)
     [:div
-     (components/h3 (i18n "Description"))
+     [:div#description-title (components/h3 (i18n "Description"))]
      [:textarea
       {:class "border rounded-lg my-3 p-3 w-3/4"
        :hx-post "description-section"
