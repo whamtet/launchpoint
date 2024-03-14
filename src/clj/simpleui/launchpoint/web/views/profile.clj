@@ -123,10 +123,10 @@
       (description-section req description)
       (components/h3 (i18n "Work History"))
       (profile.history/new-job req)
-      (profile.history/work-history req jobs false)
+      (profile.history/work-history req jobs)
       (components/h3 (i18n "Education"))
       (profile.history/new-education req)
-      (profile.history/education-history req education false)
+      (profile.history/education-history req education)
       ]]))
 
 (defn ui-routes [{:keys [query-fn]}]

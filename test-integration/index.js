@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const {assert} = require('chai');
 
-const {typeInput, clickInput} = require('./util');
+const {typeInput, clickInputValue} = require('./util');
 const {profile} = require('./profile');
 
 const prepare = async () => {
@@ -18,10 +18,10 @@ async function register(page) {
   await typeInput(page, 'first-name', 'Test');
   await typeInput(page, 'last-name', 'User');
   await typeInput(page, 'email', 'test@example.com');
-  await typeInput(page, 'password', 'asdf1234');
-  await typeInput(page, 'password2', 'asdf1234');
+  await typeInput(page, 'password', 'Flion342');
+  await typeInput(page, 'password2', 'Flion342');
 
-  await clickInput(page, 'Register');
+  await clickInputValue(page, 'Register');
   await page.waitForNavigation();
 
 }
@@ -41,8 +41,8 @@ async function register(page) {
 
   await profile(page);
 
-  // console.log('all tests passed');
+  console.log('all tests passed');
 
-  // browser.close();
+  browser.close();
 
 })();

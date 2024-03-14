@@ -20,6 +20,3 @@
          (take 5)
          (map second)
          not-empty)))
-
-(defn company-match? [src name]
-  (-> name companies (= src)))

@@ -221,7 +221,7 @@
     (simpleui/apply-component-map education-edit-modal education req i)
     [:span {:hx-get "edit-education"
             :hx-target "#modal"
-            :hx-vals {:eudcation (pr-str education) :i i}}
+            :hx-vals {:education (pr-str education) :i i}}
      (components/button (i18n "Edit Education"))]))
 
 (defcomponent ^:endpoint delete-education [req ^:long i degree]
@@ -234,22 +234,22 @@
             :hx-confirm (format (i18n "Delete %s?") degree)}
      (components/button (i18n "Delete Education"))]))
 
-(defcomponent education-history [req education pdf]
-  [:div.p-1
+(defcomponent education-history [req education]
+  [:div#education-history.p-1
    (map-indexed
     (fn [i {:keys [degree institution year] :as education}]
       [:div {:hx-target "this"}
        [:div.my-1.flex.items-center
         (components/h2 degree)
-        (when-not pdf [:span.m-2.flex (edit-education req i education) (delete-job req i degree)])]
+        [:span.m-2.flex (edit-education req i education) (delete-job req i degree)]]
        [:div.my-1
         [:span.text-lg institution]]
        [:div.my-1 year]
        [:hr {:class "border w-1/2"}]])
     education)])
 
-(defcomponent work-history [req jobs pdf]
-  [:div.p-1
+(defcomponent work-history [req jobs]
+  [:div#work-history.p-1
    (map-indexed
      (fn [i {:keys [title
                     company src
@@ -260,7 +260,7 @@
        [:div {:hx-target "this"}
         [:div.my-1.flex.items-center
          (components/h2 title)
-         (when-not pdf [:span.m-2.flex (edit-job req i job) (delete-job req i title)])]
+         [:span.m-2.flex (edit-job req i job) (delete-job req i title)]]
         [:div.flex.items-center.my-1
          [:span.mr-4.text-lg company]
          (when src [:img.w-9 {:src (str "/api/company/" src)}])]

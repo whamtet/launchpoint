@@ -29,8 +29,8 @@
    :else 0))
 
 (defn- clean-job [{:keys [src company] :as job}]
-  (if (company/company-match? src company)
-    job
+  (if-let [src (company/companies company)]
+    (assoc job :src src)
     (dissoc job :src)))
 
 (defn- add-job_ [jobs i job]
