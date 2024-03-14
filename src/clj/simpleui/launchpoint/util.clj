@@ -2,6 +2,9 @@
     (:require
       [clojure.string :as string]))
 
+(defn map-vals [f m]
+  (->> m vals (map f) (zipmap (keys m))))
+
 (defmacro zipm [& syms]
   (zipmap (map keyword syms) syms))
 

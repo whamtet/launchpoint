@@ -88,7 +88,7 @@
               :hx-target "#search-results"
               :_ "on click halt"
               :autocomplete "off"
-              :placeholder "Search users and products..."}]
+              :placeholder (i18n "Search users and products...")}]
      [:div#search-results]]))
 
 (defn profile-panel [email description]

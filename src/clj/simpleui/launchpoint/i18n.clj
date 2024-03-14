@@ -1,7 +1,32 @@
 (ns simpleui.launchpoint.i18n
     (:require
       [clojure.data.json :as json]
-      [clojure.string :as string]))
+      [clojure.java.io :as io]
+      [clojure.string :as string]
+      [simpleui.launchpoint.web.middleware.i18n :as middleware.i18n]
+      [simpleui.launchpoint.util :as util :refer [defm]]))
+
+(defn- zip-pairs [s]
+  (zipmap
+   (take-nth 2 s)
+   (take-nth 2 (rest s))))
+
+(defn slurp-translation [lang]
+  (->> lang
+       (format "i18n/%s.txt")
+       io/resource
+       slurp))
+
+(defm extract-translation [lang]
+  (if lang
+    (-> lang
+        slurp-translation
+        (.split "\n")
+        (->>
+         (map #(.trim %))
+         (filter not-empty)
+         zip-pairs))
+    {}))
 
 (def phrases #{})
 
@@ -11,19 +36,22 @@
 (defmacro i18n [^String s]
   (assert (trimmed? s))
   (alter-var-root #'phrases conj s)
-  s)
+  `((extract-translation middleware.i18n/*lang*) ~s ~s))
 
 (defmacro i18ns [& ss]
   (assert (every? trimmed? ss))
   (alter-var-root #'phrases #(apply conj % ss))
-  (vec ss))
+  `(let [m# (extract-translation middleware.i18n/*lang*)]
+    (mapv #(m# % %) (list ~@ss))))
 
 (defmacro i18n-map [m]
   (assert (map? m))
   (let [new-phrases (vals m)]
     (assert (every? trimmed? new-phrases))
     (alter-var-root #'phrases #(apply conj % new-phrases))
-    (json/write-str m)))
+    `(let [m# (extract-translation middleware.i18n/*lang*)]
+      (json/write-str
+       (util/map-vals #(m# % %) ~m)))))
 
 (defn spit-phrases []
   (->> phrases
