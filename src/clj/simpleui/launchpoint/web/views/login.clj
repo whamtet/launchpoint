@@ -4,6 +4,7 @@
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
+      [simpleui.launchpoint.web.views.lang :as lang]
       [simpleui.launchpoint.web.controllers.login :as controllers.login]))
 
 [:div.bg-clj-blue-light.text-gray-500]
@@ -40,7 +41,7 @@
          (warning (i18n "Passwords must match")))
    (components/submit (i18n "Register"))])
 
-(defn- login-disp [register first-name last-name email problem]
+(defn- login-disp [req register first-name last-name email problem]
   [:div.pt-6.pb-12.relative.min-h-screen {:hx-target "this" :_ "on click add .hidden to .drop"}
    [:a.absolute.top-3.left-3 {:href ""}
     [:img.w-24 {:src "/logo.svg"}]]
@@ -66,9 +67,7 @@
       (registration-form first-name last-name email problem)
       (login-form email problem))]
    ;; language selector
-   [:div.absolute.bottom-0.flex.w-full.justify-center
-    (dropdown/dropup
-     "English" ["日本語"])]])
+   (lang/lang-dropup req)])
 
 (defmacro or-keyword [test alternative]
   `(let [~'$ ~test]
@@ -82,13 +81,14 @@
                                 password
                                 password2
                                 command]
+  lang/lang-dropup ;; to ensure resolution
   (case command
         "login"
         (or-keyword
          (controllers.login/login req email password)
-         (login-disp register first-name last-name email $))
+         (login-disp req register first-name last-name email $))
         "register"
         (or-keyword
          (controllers.login/register req first-name last-name email password password2)
-         (login-disp register first-name last-name email $))
-        (login-disp register first-name last-name email nil)))
+         (login-disp req register first-name last-name email $))
+        (login-disp req register first-name last-name email nil)))

@@ -1,0 +1,239 @@
+Add Education
+学歴を入力する
+
+Add Job
+職歴を入力する
+
+Add to cart
+カートに入れる
+
+An unexpected error occurred.
+予期せぬエラーが発生しました
+
+April
+4月
+
+August
+8月
+
+Checkout
+カート
+
+Checkout is empty
+カートは空です
+
+Company
+会社
+
+Dashboard
+ダッシュボード
+
+December
+12月
+
+Degree
+学位
+
+Delete %s?
+％sを削除しますか？
+
+Delete Education
+学歴を削除する
+
+Delete Job
+職歴を削除する
+
+Describe your role...
+あなたの役割について
+
+Describe yourself...
+あなた自身について
+
+Description
+説明
+
+Edit
+編集
+
+Edit Education
+学歴を編集する
+
+Edit Job
+職歴を編集する
+
+Education
+学歴
+
+Email
+Eメール
+
+February
+2月
+
+First name
+名
+
+From Month
+月から
+
+From Year
+年から
+
+I am currently in this role
+現職
+
+Import LinkedIn PDF
+LinkedInのPDFを取り込む
+
+Import from LinkedIn
+LinkedInから取り込む
+
+Institution
+学校
+
+January
+1月
+
+Job Title
+職位
+
+July
+7月
+
+June
+6月
+
+Last name
+氏
+
+Login
+ログイン
+
+Logout
+ログアウト
+
+Manage Store
+ストアの管理
+
+March
+3月
+
+May
+5月
+
+My Profile
+プロフィール
+
+New Education
+学歴を追加する
+
+New Job
+職歴を追加する
+
+Not Specified
+特になし
+
+November
+11月
+
+October
+10月
+
+On your LinkedIn profile page click the menu as shown below
+LinkedInのプロフィールページで、以下のメニューをクリックしてください
+
+Order
+注文
+
+Order Summary
+注文概要
+
+Orders
+注文
+
+Password
+パスワード
+
+Password Confirm
+パスワードの確認
+
+Password requires at least 8 letters and numbers
+パスワードは8文字以上の英数字が必要です
+
+Passwords must match
+パスワードは一致しなければなりません
+
+Pay now
+支払いをする
+
+Payment succeeded!
+お支払いが完了しました！
+
+Please allow popups then refresh this page.
+ポップアップを許可してから、ページを更新してください。
+
+Please choose another email
+他のEメールを選択してください。
+
+Present
+プレゼント
+
+Price ($)
+価格（$）
+
+Profile pics are managed by Gravatar.  Updates take a few minutes to show up.
+プロフィール写真はGravatarによって管理されています。更新には数分かかります。
+
+Quantity
+数量
+
+Register
+登録する
+
+Save
+保存する
+
+September
+9月
+
+SimpleUI Launchpoint
+SimpleUI Launchpoint
+
+Something went wrong.
+エラーが発生しました。
+
+Something went wrong.  Please email your PDF to whamtet@gmail.com
+エラーが発生しました。PDFをwhamtet@gmail.comにご送付ください。
+
+To Month
+月まで
+
+To Year
+年まで
+
+Total
+合計
+
+Try card 4242 4242 4242 4242
+4242 4242 4242 4242　カードを利用する
+
+Unknown account
+不明なアカウント
+
+Upload the PDF here
+PDFのアップロードはこちら
+
+View PDF
+PDFを見る
+
+Work History
+職歴
+
+Year
+年
+
+Your payment is processing.
+お支払い手続き中です。
+
+Your payment was not successful, please try again.
+お支払いできませんでした。再度実行してください。

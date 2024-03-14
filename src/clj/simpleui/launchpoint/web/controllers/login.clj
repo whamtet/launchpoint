@@ -18,6 +18,9 @@
   (refresh-session
    (apply dissoc session keys)))
 
+(defn assoc-lang [session lang]
+  (assoc-session session :lang lang))
+
 (def pw-regex #"(?=.*[A-Za-z])(?=.*\d).{8,}")
 
 (defn duplicate-email? [e]

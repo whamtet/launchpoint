@@ -23,11 +23,11 @@
              :_ "on click halt the event then toggle .hidden on the previous .drop"}
     [:span.mr-2 label]]])
 
-(defn dropup [label other-items]
+(defn dropup [label m]
   [:div
    [:div {:class "drop hidden rounded-lg border p-1.5 bg-white"}
-    (for [item other-items]
-      [:a {:href ""}
+    (for [[k v] m]
+      [:a {:href "" :hx-get k}
        [:div {:class "hover:bg-slate-100"}
-        item]])]
+        v]])]
    (button-up label)])
