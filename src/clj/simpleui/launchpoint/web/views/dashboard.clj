@@ -11,6 +11,7 @@
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
       [simpleui.launchpoint.web.views.icons :as icons]
+      [simpleui.launchpoint.web.views.lang :as lang]
       [simpleui.launchpoint.util :as util]))
 
 (defn gravatar
@@ -132,4 +133,5 @@
      (main-dropdown basket-count first_name)
      [:div.flex.p-3.space-x-4
       (profile-panel email description)
-      (orders-panel req)]]))
+      (orders-panel req)]
+     (lang/lang-dropup req)]))
