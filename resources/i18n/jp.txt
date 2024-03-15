@@ -35,7 +35,7 @@ Degree
 学位
 
 Delete %s?
-％sを削除しますか？
+%sを削除しますか？
 
 Delete Education
 学歴を削除する
@@ -237,3 +237,6 @@ Your payment is processing.
 
 Your payment was not successful, please try again.
 お支払いできませんでした。再度実行してください。
+
+Search users and products...
+ユーザーと商品を検索する...

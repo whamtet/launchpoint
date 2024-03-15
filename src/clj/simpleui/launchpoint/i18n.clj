@@ -4,7 +4,7 @@
       [clojure.java.io :as io]
       [clojure.string :as string]
       [simpleui.launchpoint.web.middleware.i18n :as middleware.i18n]
-      [simpleui.launchpoint.util :as util :refer [defm]]))
+      [simpleui.launchpoint.util :as util :refer [defm-dev]]))
 
 (defn- zip-pairs [s]
   (zipmap
@@ -17,7 +17,7 @@
        io/resource
        slurp))
 
-(defm extract-translation [lang]
+(defm-dev extract-translation [lang]
   (if lang
     (-> lang
         slurp-translation

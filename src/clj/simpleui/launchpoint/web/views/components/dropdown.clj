@@ -16,18 +16,9 @@
       [:div {:class "hover:bg-slate-100"}
        item])]])
 
-(defn- button-up [label]
+(defn button-up [label]
   [:div
    [:button {:type "button"
              :class "p-1.5 w-32 caret-up"
              :_ "on click halt the event then toggle .hidden on the previous .drop"}
     [:span.mr-2 label]]])
-
-(defn dropup [label m]
-  [:div
-   [:div {:class "drop hidden rounded-lg border p-1.5 bg-white"}
-    (for [[k v] m]
-      [:a {:href "" :hx-get k}
-       [:div {:class "hover:bg-slate-100"}
-        v]])]
-   (button-up label)])

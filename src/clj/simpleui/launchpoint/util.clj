@@ -1,6 +1,7 @@
 (ns simpleui.launchpoint.util
     (:require
-      [clojure.string :as string]))
+      [clojure.string :as string]
+      [simpleui.launchpoint.env :refer [dev?]]))
 
 (defn map-vals [f m]
   (->> m vals (map f) (zipmap (keys m))))
@@ -38,6 +39,9 @@
 
 (defmacro defm [sym & rest]
   `(def ~sym (memoize (fn ~@rest))))
+
+(defmacro defm-dev [sym & rest]
+  `(def ~sym ((if dev? identity memoize) (fn ~@rest))))
 
 (defn format$ [x]
   (format "%.2f" x))

@@ -26,7 +26,7 @@ Search for shop items using the omnibar at the top of the dashboard.
 
 ![](usage/shopping.png)
 
-Purchase items on the results page. The checkout is connected to a test Stripe account which accepts card `4242 4242 4242 4242`. 
+Purchase items on the results page. The checkout is connected to a test Stripe account which accepts card `4242 4242 4242 4242`.
 
 ## Developer Usage
 
@@ -63,3 +63,15 @@ Note that this alias runs nREPL during development. To run nREPL in production (
 Run `clj -M:dev:nrepl` or `make repl`.
 
 Note that, just like with [CIDER](#cider), this alias runs nREPL during development. To run nREPL in production (typically when the system starts), use the kit-nrepl library through the +nrepl profile as described in [the documentation](https://kit-clj.github.io/docs/profiles.html#profiles).
+
+### Internationalization
+
+Launchpoint supports any language, simply run
+
+```clojure
+(simpleui.launchpoint.i18n/spit-phrases)
+```
+
+This will spit out `i18n.txt` which contains all the English phrases.  To add e.g. Japanese, put matching phrases below
+each line of English.  Next save the file with its language code `resources/i18n/jp.txt`.  Finally add an entry to
+`simpleui.launchpoint.web.views.lang/lang-disp` to make it available for users.
