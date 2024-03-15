@@ -74,4 +74,4 @@ Launchpoint supports any language, simply run
 
 This will spit out `i18n.txt` which contains all the English phrases.  To add e.g. Japanese, put matching phrases below
 each line of English.  Next save the file with its language code `resources/i18n/jp.txt`.  Finally add an entry to
-`simpleui.launchpoint.web.views.lang/lang-disp` to make it available for users.
+`simpleui.launchpoint.web.views.lang/lang-disp` so that it becomes an option in the footer popup.
