@@ -3,6 +3,7 @@
 
  :deps    {org.clojure/clojure {:mvn/version "1.11.1"}
            org.clj-commons/digest {:mvn/version "1.4.100"}
+           com.google.api-client/google-api-client {:mvn/version "1.32.1"}
 
            crypto-password/crypto-password {:mvn/version "0.3.0"}
 
@@ -29,7 +30,7 @@
  io.github.kit-clj/kit-sql-migratus {:mvn/version "1.0.4"}
  org.xerial/sqlite-jdbc {:mvn/version "3.36.0.3"}
  simpleui/simpleui {:git/url "https://github.com/whamtet/simpleui",
-                    :git/sha "c988f0e1b9210578d9028f6292579f488f3e79a9"}
+                    :git/sha "0fe033e6cfd7acce31b56293c22bd7c46beaba3c"}
            clj-http/clj-http {:mvn/version "3.12.3"}
            com.stripe/stripe-java {:mvn/version "24.18.0"}
            clojurewerkz/quartzite {:mvn/version "2.2.0"}

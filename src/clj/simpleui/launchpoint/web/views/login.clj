@@ -1,11 +1,30 @@
 (ns simpleui.launchpoint.web.views.login
     (:require
+      [simpleui.launchpoint.env :refer [host]]
       [simpleui.launchpoint.i18n :refer [i18n]]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
       [simpleui.launchpoint.web.views.lang :as lang]
       [simpleui.launchpoint.web.controllers.login :as controllers.login]))
+
+(def logins
+  [:div
+   [:div
+    {:id "g_id_onload",
+     :data-client_id (System/getenv "GSI_CLIENT_LAUNCHPOINT")
+     :data-context "signin",
+     :data-ux_mode "redirect",
+     :data-login_uri (host "/api/gsi")
+     :data-auto_prompt "false"}]
+   [:div
+    {:class "g_id_signin",
+     :data-type "standard",
+     :data-shape "rectangular",
+     :data-theme "outline",
+     :data-text "signin_with",
+     :data-size "large",
+     :data-logo_alignment "left"}]])
 
 [:div.bg-clj-blue-light.text-gray-500]
 (defn- highlight [s highlighted?]
@@ -18,7 +37,7 @@
   [:div.m-1 (components/warning msg)])
 
 (defn login-form [email problem]
-  [:form.py-3 {:hx-post "login:login"}
+  [:form.p-2 {:hx-post "login:login"}
    (components/email (i18n "Email") "email" email)
    (components/password (i18n "Password") "password")
    (when (= :unknown problem)
@@ -26,7 +45,7 @@
    (components/submit (i18n "Login"))])
 
 (defn- registration-form [first-name last-name email problem]
-  [:form#registration-form.py-3 {:hx-post "login:register"}
+  [:form#registration-form.p-2 {:hx-post "login:register"}
    (components/hidden "register" true)
    (components/text (i18n "First name") "first-name" first-name :required)
    (components/text (i18n "Last name") "last-name" last-name :required)

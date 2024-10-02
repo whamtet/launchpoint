@@ -13,3 +13,6 @@
 
 (def dev? false)
 (def prod? true)
+
+(defn host [& strs]
+  (apply str "https://launchpoint.simpleui.io" strs))

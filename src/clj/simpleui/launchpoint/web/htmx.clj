@@ -24,21 +24,22 @@
     (.replace s ".min" "")
     s))
 
-(defn- scripts [js hyperscript? stripe?]
+(defn- scripts [{:keys [js hyperscript? stripe? google?]}]
   (cond-> js
           hyperscript? (conj (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js"))
           stripe? (conj (resource-cache/cache-suffix "/checkout.js")
-                        "https://js.stripe.com/v3/")))
+                        "https://js.stripe.com/v3/")
+          google? (conj [:script {:src "https://accounts.google.com/gsi/client" :async true :defer true}])))
 
-(defn page-htmx [{:keys [css js hyperscript? stripe?]} & body]
+(defn page-htmx [opts & body]
   (page
    [:head
     [:meta {:charset "UTF-8"}]
     [:title (i18n "SimpleUI Launchpoint")]
     [:link {:rel "icon" :href "/logo_dark.svg"}]
-    (when stripe?
+    (when (:stripe? opts)
           [:link {:rel "stylesheet" :href "/checkout.css"}])
-    (for [sheet css]
+    (for [sheet (:css opts)]
       [:link {:rel "stylesheet" :href (resource-cache/cache-suffix sheet)}])]
    [:body
     (render/walk-attrs body)
@@ -48,7 +49,7 @@
     (map
      (fn [src]
        [:script {:src src}])
-     (scripts js hyperscript? stripe?))]))
+     (scripts opts))]))
 
 (defn page-simple [{:keys [css]} & body]
   (page
