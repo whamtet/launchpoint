@@ -25,10 +25,11 @@
     s))
 
 (defn- scripts [{:keys [js hyperscript? stripe? google?]}]
-  (cond-> js
-          hyperscript? (conj (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js"))
-          stripe? (conj (resource-cache/cache-suffix "/checkout.js")
-                        "https://js.stripe.com/v3/")
+  (cond-> (map #(vector :script {:src (resource-cache/cache-suffix %)}) js)
+          hyperscript? (conj
+                        [:script {:src (unminify "https://unpkg.com/hyperscript.org@0.9.12/dist/_hyperscript.min.js")}])
+          stripe? (conj [:script {:src (resource-cache/cache-suffix "/checkout.js")}]
+                        [:script {:src "https://js.stripe.com/v3/"}])
           google? (conj [:script {:src "https://accounts.google.com/gsi/client" :async true :defer true}])))
 
 (defn page-htmx [opts & body]
@@ -46,10 +47,7 @@
     [:script {:src
               (unminify "https://unpkg.com/htmx.org@1.9.5/dist/htmx.min.js")}]
     [:script "htmx.config.defaultSwapStyle = 'outerHTML';"]
-    (map
-     (fn [src]
-       [:script {:src src}])
-     (scripts opts))]))
+    (scripts opts)]))
 
 (defn page-simple [{:keys [css]} & body]
   (page

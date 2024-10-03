@@ -10,9 +10,12 @@
    ""
    [query-fn]
    (fn [req]
-     (let [req (assoc req :query-fn query-fn)]
+     (let [req (assoc req :query-fn query-fn)
+           logged-in? (-> req :session :id)]
        (page-htmx
-        {:css ["/output.css"] :hyperscript? true}
-        (if (-> req :session :id)
+        {:css ["/output.css"]
+         :hyperscript? true
+         :google? (not logged-in?)}
+        (if logged-in?
           (dashboard/dashboard req)
           (login/login req)))))))

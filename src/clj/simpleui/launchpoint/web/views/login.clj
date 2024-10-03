@@ -42,7 +42,9 @@
    (components/password (i18n "Password") "password")
    (when (= :unknown problem)
          (warning (i18n "Unknown account")))
-   (components/submit (i18n "Login"))])
+   (components/submit (i18n "Login"))
+   [:hr.border-t.my-2]
+   logins])
 
 (defn- registration-form [first-name last-name email problem]
   [:form#registration-form.p-2 {:hx-post "login:register"}
