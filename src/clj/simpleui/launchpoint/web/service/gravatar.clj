@@ -44,7 +44,7 @@
   (-> "asdf" slurp-gravatar ->img))
 
 (defn mse [bytes]
-  (mse* (->img bytes1) (default-gravatar)))
+  (mse* (->img bytes) (default-gravatar)))
 
 (defm substitute-default []
   (let [o (ByteArrayOutputStream.)]
