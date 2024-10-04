@@ -40,11 +40,11 @@
         (/ $ (alength pixels1))
         (Math/sqrt $)))
 
-(defn mse [bytes1 bytes2]
-  (mse* (->img bytes1) (->img bytes2)))
-
 (defm default-gravatar []
-  (slurp-gravatar "asdf"))
+  (-> "asdf" slurp-gravatar ->img))
+
+(defn mse [bytes]
+  (mse* (->img bytes1) (default-gravatar)))
 
 (defm substitute-default []
   (let [o (ByteArrayOutputStream.)]
@@ -53,7 +53,7 @@
 
 (defn- gravatar* [email]
   (let [pic (slurp-gravatar email)]
-    (if (< (mse pic (default-gravatar)) 5)
+    (if (< (mse pic) 5)
       {:body (substitute-default)
        :mime "image/png"}
       {:body pic
