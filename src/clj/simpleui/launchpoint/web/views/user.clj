@@ -7,14 +7,14 @@
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.htmx :refer [page-htmx]]
       [simpleui.launchpoint.web.views.components :as components]
-      [simpleui.launchpoint.web.views.dashboard :as dashboard :refer [gravatar]]
+      [simpleui.launchpoint.web.views.dashboard :as dashboard]
       [simpleui.launchpoint.web.views.profile.history :refer [months]]
       [simpleui.launchpoint.util :as util]
       [simpleui.response :as response]))
 
 (defn- pic [email]
   [:div.my-3.border.rounded-lg.inline-block.overflow-hidden.relative
-   [:img {:src (gravatar email)}]])
+   [:img {:src (dashboard/gravatar email)}]])
 
 (defn- names [user_id first_name last_name pdf?]
   [:div

@@ -11,6 +11,7 @@
     [simpleui.launchpoint.web.htmx :refer [page-simple redirect-tab]]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
+    [simpleui.launchpoint.web.service.gravatar :as gravatar]
     [simpleui.launchpoint.web.views.checkout :as views.checkout]
     [simpleui.launchpoint.web.views.user :as views.user]
     [integrant.core :as ig]
@@ -115,6 +116,13 @@
        {:status 200
         :headers {"Content-Type" "application/pdf"}
         :body (pdf/pdf-profile (headers "cookie") (:user-id path-params))})]
+    ["/gravatar/:email"
+     (fn [{:keys [session path-params]}]
+       (assert (:id session))
+       (let [{:keys [body mime]} (-> path-params :email gravatar/gravatar)]
+         {:status 200
+          :headers {"Content-Type" mime}
+          :body body}))]
     ["/health"
      {:get health/healthcheck!}]]
    dev? (conj ["/user/:user-id"

@@ -14,13 +14,8 @@
       [simpleui.launchpoint.web.views.lang :as lang]
       [simpleui.launchpoint.util :as util]))
 
-(defn gravatar
-  ([^String email] (gravatar email 256))
-  ([^String email size]
-   (when email
-         (format "https://gravatar.com/avatar/%s?s=%s"
-                 (-> email .trim .toLowerCase digest/sha256)
-                 size))))
+(defn gravatar [email]
+  (str "/api/gravatar/" email))
 
 (defn main-dropdown [basket-count first_name]
   [:div.absolute.top-1.right-1.flex.items-center
@@ -61,7 +56,7 @@
   (if user_id
     [:a {:href ($format "/user/{user_id}/")}
      [:div {:class "flex hover:bg-slate-100"}
-      [:img.w-20 {:src (gravatar email 80)}]
+      [:img.w-20 {:src (gravatar email)}]
       [:div.p-3.w-full.text-gray-700.text-lg.flex.flex-col.justify-center
        first_name " " last_name]]]
     [:a {:href ($format "/item/{id}/")}

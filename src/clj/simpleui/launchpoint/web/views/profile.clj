@@ -7,7 +7,7 @@
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.htmx :refer [page-htmx defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
-      [simpleui.launchpoint.web.views.dashboard :as dashboard :refer [gravatar]]
+      [simpleui.launchpoint.web.views.dashboard :as dashboard]
       [simpleui.launchpoint.web.views.profile.history :as profile.history]
       [simpleui.response :as response]))
 
@@ -16,7 +16,7 @@
     (components/modal "w-1/2"
                       [:div.flex
                        [:div.m-2.border.rounded-lg.inline-block.overflow-hidden
-                        [:img {:src (gravatar email)}]]
+                        [:img {:src (dashboard/gravatar email)}]]
                        [:div.p-1
                         (components/p (i18n "Profile pics are managed by Gravatar.  Updates take a few minutes to show up."))
                         [:a {:href "https://gravatar.com/profile/avatars/"
@@ -32,7 +32,7 @@
       [:div {:class "absolute left-0 top-0 w-64 h-64
       hidden justify-center items-center"}
        [:div.text-white.text-4xl (i18n "Edit")]]
-      [:img {:src (gravatar email)}]]]))
+      [:img {:src (dashboard/gravatar email)}]]]))
 
 (def import-error
   [:div.mt-3

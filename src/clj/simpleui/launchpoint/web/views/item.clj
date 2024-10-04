@@ -8,7 +8,7 @@
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.htmx :refer [page-htmx defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
-      [simpleui.launchpoint.web.views.dashboard :as dashboard :refer [gravatar]]
+      [simpleui.launchpoint.web.views.dashboard :as dashboard]
       [simpleui.launchpoint.web.views.profile.history :as profile.history]
       [simpleui.response :as response]))
 
