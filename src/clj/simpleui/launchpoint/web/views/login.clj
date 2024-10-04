@@ -18,7 +18,7 @@
   [:div.m-1 (components/warning msg)])
 
 (defn login-form [email problem]
-  [:form.py-3 {:hx-post "login:login"}
+  [:form.p-2 {:hx-post "login:login"}
    (components/email (i18n "Email") "email" email)
    (components/password (i18n "Password") "password")
    (when (= :unknown problem)
@@ -26,7 +26,7 @@
    (components/submit (i18n "Login"))])
 
 (defn- registration-form [first-name last-name email problem]
-  [:form#registration-form.py-3 {:hx-post "login:register"}
+  [:form#registration-form.p-2 {:hx-post "login:register"}
    (components/hidden "register" true)
    (components/text (i18n "First name") "first-name" first-name :required)
    (components/text (i18n "Last name") "last-name" last-name :required)
