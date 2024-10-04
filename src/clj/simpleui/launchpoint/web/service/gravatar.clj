@@ -6,9 +6,9 @@
       [clj-http.client :as client]
       [simpleui.launchpoint.util :refer [defm]])
     (:import
+      javax.imageio.ImageIO
       java.io.ByteArrayInputStream
-      java.io.ByteArrayOutputStream
-      java.util.Arrays))
+      java.io.ByteArrayOutputStream))
 
 (def cache (cache/lu-cache-factory {}))
 ; (cache/through-cache cache :hi prn)
@@ -19,12 +19,29 @@
           size))
 
 (defn slurp-gravatar [email]
-  (prn (gravatar-link email 256))
   (->
    email
    (gravatar-link 256)
    (client/get {:as :byte-array})
    :body))
+
+(defn ->img [bytes]
+  (-> bytes
+      ByteArrayInputStream.
+      ImageIO/read
+      .getRaster
+      .getDataBuffer
+      .getData))
+
+(defn mse* [pixels1 pixels2]
+  (assert (= (alength pixels1) (alength pixels2)))
+  (as-> (map #(* (- %1 %2) (- %1 %2)) pixels1 pixels2) $
+        (apply + $)
+        (/ $ (alength pixels1))
+        (Math/sqrt $)))
+
+(defn mse [bytes1 bytes2]
+  (mse* (->img bytes1) (->img bytes2)))
 
 (defm default-gravatar []
   (slurp-gravatar "asdf"))
@@ -36,16 +53,13 @@
 
 (defn- gravatar* [email]
   (let [pic (slurp-gravatar email)]
-    (if (Arrays/equals pic (default-gravatar))
+    (if (< (mse pic (default-gravatar)) 5)
       {:body (substitute-default)
        :mime "image/png"}
       {:body pic
        :mime "image/jpeg"})))
 
 (defn gravatar [email]
-  (-> email
-      gravatar*
-      (update :body #(ByteArrayInputStream. %))) #_
   (-> cache
       (cache/through-cache email gravatar*)
       (get email)
