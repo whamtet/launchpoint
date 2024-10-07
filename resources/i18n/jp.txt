@@ -240,3 +240,6 @@ Your payment was not successful, please try again.
 
 Search users and products...
 ユーザーと商品を検索する...
+
+Remove last item?
+最後の項目を削除しますか?

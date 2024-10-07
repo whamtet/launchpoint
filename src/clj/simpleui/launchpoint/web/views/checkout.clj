@@ -31,6 +31,7 @@
       (button "+")]
      [:div.mx-3 quantity]
      [:div {:hx-post "checkout:dec"
+            :hx-confirm (when (= 1 quantity) (i18n "Remove last item?"))
             :hx-vals {:inventory_id id}}
       (button "-")]]]
    [:td

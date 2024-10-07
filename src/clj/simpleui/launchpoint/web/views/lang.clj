@@ -15,7 +15,7 @@
    [:div {:class "drop hidden rounded-lg border p-1.5 bg-white"}
     [:a {:href "https://github.com/whamtet/launchpoint#internationalization"
          :target "_blank"}
-     [:div {:class "p-1 hover:bg-slate-100"}
+     [:div {:class "p-2 hover:bg-slate-100"}
       "Add your language..."]]
     (for [[new-lang v] m]
       [:a {:href "" :hx-get "lang-dropup" :hx-vals {:new-lang new-lang}}
