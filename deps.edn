@@ -30,7 +30,7 @@
  io.github.kit-clj/kit-sql-migratus {:mvn/version "1.0.4"}
  org.xerial/sqlite-jdbc {:mvn/version "3.36.0.3"}
  simpleui/simpleui {:git/url "https://github.com/whamtet/simpleui",
-                    :git/sha "c988f0e1b9210578d9028f6292579f488f3e79a9"}
+                    :git/sha "ff196d6493609a15854b52039e32adc500295f08"}
            clj-http/clj-http {:mvn/version "3.12.3"}
            com.stripe/stripe-java {:mvn/version "24.18.0"}
            clojurewerkz/quartzite {:mvn/version "2.2.0"}
