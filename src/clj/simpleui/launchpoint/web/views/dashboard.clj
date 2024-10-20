@@ -42,7 +42,7 @@
      [:a {:href "/store/"}
       [:div.p-2
         (i18n "Manage Store")]]
-     [:a {:href ""}
+     [:div.cursor-pointer
       [:div.p-2 {:hx-post "/api/logout"}
         (i18n "Logout")]]])])
 
