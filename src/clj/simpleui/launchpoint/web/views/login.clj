@@ -1,13 +1,14 @@
 (ns simpleui.launchpoint.web.views.login
     (:require
       [simpleui.launchpoint.i18n :refer [i18n]]
+      [simpleui.launchpoint.util :refer [defcss]]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
       [simpleui.launchpoint.web.views.lang :as lang]
       [simpleui.launchpoint.web.controllers.login :as controllers.login]))
 
-[:div.bg-clj-blue-light.text-gray-500]
+(defcss [:div.bg-clj-blue-light.text-gray-500])
 (defn- highlight [s highlighted?]
   (str s
        (if highlighted?

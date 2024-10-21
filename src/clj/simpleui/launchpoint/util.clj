@@ -49,3 +49,7 @@
 (defn map-last [f s]
   (let [c (dec (count s))]
     (map-indexed #(f (= %1 c) %2) s)))
+
+(defmacro defcss
+  "Define tailwind classes for the tailwind parser (noop)"
+  [& forms])

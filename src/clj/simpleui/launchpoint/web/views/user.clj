@@ -9,7 +9,7 @@
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.dashboard :as dashboard]
       [simpleui.launchpoint.web.views.profile.history :refer [months]]
-      [simpleui.launchpoint.util :as util]
+      [simpleui.launchpoint.util :as util :refer [defcss]]
       [simpleui.response :as response]))
 
 (defn- pic [email]
@@ -72,7 +72,7 @@
        (when-not last? [:hr {:class "my-3 border w-1/2"}])])
     education)])
 
-[:div {:class "w-2/3"}]
+(defcss [:div {:class "w-2/3"}])
 (defn- page-width [style pdf?]
   (if pdf?
     style

@@ -6,7 +6,7 @@
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
       [simpleui.launchpoint.web.views.components :as components]
-      [simpleui.launchpoint.util :as util]
+      [simpleui.launchpoint.util :as util :refer [defcss]]
       [simpleui.response :as response]))
 
 (def hide-search-results
@@ -90,7 +90,7 @@
     :asterisk asterisk
     :required asterisk}))
 
-[:div.opacity-50]
+(defcss [:div.opacity-50])
 (defcomponent ^:endpoint job-to [req ^:long-option to-year ^:long-option to-month ^:boolean present]
   [:fieldset#job-to {:class (if present
                               "flex opacity-50"
@@ -102,7 +102,7 @@
    [:div {:class "w-1/2"}
     (month-select (i18n "To Month") "to-month" to-month (not present))]])
 
-[:div {:class "w-1/2"}]
+(defcss [:div {:class "w-1/2"}])
 (defcomponent ^:endpoint education-edit-modal [req
                                                ^:long-option i
                                                degree institution year
@@ -131,7 +131,7 @@
                            (components/submit (i18n "Save"))
                            ])))
 
-[:div {:class "w-2/3"}]
+(defcss [:div {:class "w-2/3"}])
 (defcomponent ^:endpoint job-edit-modal [req
                                          ^:long-option i
                                          title company src
