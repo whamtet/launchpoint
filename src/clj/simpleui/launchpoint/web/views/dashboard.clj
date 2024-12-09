@@ -91,7 +91,7 @@
      [:div#search-results]]))
 
 (defn profile-panel [email description]
-  [:a {:href "/profile"}
+  [:a {:href "/profile/"}
    [:div.w-96.border.rounded-lg.p-1.text-gray-500
     [:div
      [:img.mx-auto {:src (gravatar email)}]]
