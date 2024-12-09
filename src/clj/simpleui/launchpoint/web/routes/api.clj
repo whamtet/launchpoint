@@ -123,6 +123,11 @@
          {:status 200
           :headers {"Content-Type" mime}
           :body body}))]
+    ["/inspect"
+     (fn [req]
+       {:status 200
+        :headers {"Content-Type" "text/html"}
+        :body (-> req (dissoc :reitit.core/match) pr-str)})]
     ["/health"
      {:get health/healthcheck!}]]
    dev? (conj ["/user/:user-id"
