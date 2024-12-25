@@ -16,7 +16,10 @@
          {:name (name k) :content v})
      m))
 
+;; prod
 ;; docker run --rm --net=host -d gotenberg/gotenberg:8
+
+;; dev
 ;; docker run --rm -d -p 3000:3000 gotenberg/gotenberg:8
 (defn pdf-profile [cookie user-id]
     (:body
