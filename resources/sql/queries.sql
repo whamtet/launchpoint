@@ -28,6 +28,11 @@ insert into inventory (item_id, count)
 values (:item_id, :count)
 on conflict(item_id) do update set count = :count
 
+-- :name decrement-inventory :execute
+update inventory
+set count = max(count - :quantity, 0)
+where item_id = :id
+
 -- :name update-names :execute
 update user
 set first_name = :first_name, last_name = :last_name

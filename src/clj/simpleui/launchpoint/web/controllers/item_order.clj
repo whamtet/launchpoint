@@ -54,6 +54,8 @@
 
 (defn complete-order [{:keys [query-fn session] :as req}]
   (when-let [order (my-order req)]
+    (doseq [item order]
+      (query-fn :decrement-inventory item))
     (let [order-id
           (->> order
                (map #(select-keys % [:id :price :quantity]))
