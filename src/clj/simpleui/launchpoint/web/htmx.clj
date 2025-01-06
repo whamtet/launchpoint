@@ -71,6 +71,6 @@
     `(simpleui/defcomponent ~name ~args
       (let [{:keys [~'session ~'path-params ~'query-fn]} ~sym
             ~'params (merge ~'params ~'path-params)
-            {:keys [~'id ~'lang]} ~'session]
+            {:keys [~'id]} ~'session]
         ~@body))
     (throw (Exception. "req ill defined"))))

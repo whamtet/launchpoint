@@ -18,7 +18,7 @@
        slurp))
 
 (defm-dev extract-translation [lang]
-  (if lang
+  (if (and lang (not= "en" lang))
     (-> lang
         slurp-translation
         (.split "\n")

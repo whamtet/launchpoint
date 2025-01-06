@@ -2,13 +2,14 @@
     (:require
       [simpleui.launchpoint.i18n :refer [i18n]]
       [simpleui.launchpoint.web.htmx :refer [defcomponent]]
+      [simpleui.launchpoint.web.middleware.i18n :as middleware.i18n]
       [simpleui.launchpoint.web.views.components :as components]
       [simpleui.launchpoint.web.views.components.dropdown :as dropdown]
       [simpleui.launchpoint.web.controllers.login :as controllers.login]))
 
 (def lang-disp
-  {nil "English"
-   "jp" "日本語"})
+  {"en" "English"
+   "ja" "日本語"})
 
 (defn dropup [label m]
   [:div
@@ -28,5 +29,5 @@
     (controllers.login/assoc-lang (:session req) new-lang)
     [:div.absolute.bottom-0.flex.w-full.justify-center
      (dropup
-      (lang-disp lang)
-      (dissoc lang-disp lang))]))
+      (lang-disp middleware.i18n/*lang*)
+      (dissoc lang-disp middleware.i18n/*lang*))]))
