@@ -4,7 +4,9 @@
 
 ;; fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5
 (defn- default-lang [req]
-  (re-find #"en|ja" (get-in req [:headers "accept-language"])))
+  (some->>
+   (get-in req [:headers "accept-language"])
+   (re-find #"en|ja|ko")))
 
 (defn set-lang [handler]
   (fn [req]
