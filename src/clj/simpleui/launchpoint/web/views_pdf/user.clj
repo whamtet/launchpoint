@@ -1,7 +1,7 @@
-(ns simpleui.launchpoint.web.views.user-pdf
+(ns simpleui.launchpoint.web.views-pdf.user
     (:require
       [simpleui.launchpoint.i18n :refer [i18n]]
-      [simpleui.launchpoint.pdf :as pdf]
+      [simpleui.launchpoint.web.views-pdf.core :as core]
       [simpleui.launchpoint.web.controllers.profile :as profile]
       [simpleui.launchpoint.web.controllers.user :as user]
       [simpleui.launchpoint.web.service.gravatar :as gravatar]
@@ -18,10 +18,8 @@
            :align :center} (gravatar/gravatar-raw email)])
 
 (defn- names [first_name last_name]
-  (list
-    [:spacer 0.1]
-    [:paragraph {:size 20
-                 :align :center} first_name " " last_name]))
+  [:paragraph {:size 20
+               :align :center} first_name " " last_name])
 
 (defn- description-section [description]
   (list
@@ -41,7 +39,8 @@
       (list
        [:paragraph {:size 13} title]
        [:paragraph {:size 12} company]
-       [:paragraph
+       (core/break 2)
+       [:paragraph.gray
         (if (pos? from-month)
           (list ((months) from-month) " " from-year " - ")
           (list from-year " - "))
@@ -50,6 +49,7 @@
           (pos? to-month)
           (list ((months) to-month) " " to-year)
           :else to-year)]
+       (core/break 2)
        [:paragraph (.replace description "\n" " ")]
        [:spacer]))
     jobs)))
@@ -67,12 +67,12 @@
 (defn- header [text]
   (list
    [:paragraph {:size 16} text]
-   [:spacer 0.5]))
+   (core/break 6)))
 
 (defn- profile* [req]
   (let [{:keys [first_name last_name email]} (user/get-user req)
         {:keys [description jobs education]} (profile/get-cv req)]
-    [{}
+    [{:stylesheet core/stylesheet}
      (pic email)
      (names first_name last_name)
      (description-section description)
@@ -82,4 +82,4 @@
      (education-history education)]))
 
 (defn profile [req]
-  (pdf/pdf (profile* req)))
+  (core/pdf (profile* req)))

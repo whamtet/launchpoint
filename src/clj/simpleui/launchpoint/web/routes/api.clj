@@ -13,7 +13,7 @@
     [simpleui.launchpoint.web.service.gravatar :as gravatar]
     [simpleui.launchpoint.web.views.checkout :as views.checkout]
     [simpleui.launchpoint.web.views.user :as views.user]
-    [simpleui.launchpoint.web.views.user-pdf :as views.user-pdf]
+    [simpleui.launchpoint.web.views-pdf.user :as views-pdf.user]
     [integrant.core :as ig]
     [reitit.coercion.malli :as malli]
     [reitit.ring.coercion :as coercion]
@@ -102,7 +102,7 @@
        (-> req :session :id assert)
        {:status 200
         :headers {"Content-Type" "application/pdf"}
-        :body (-> req (assoc :query-fn query-fn) views.user-pdf/profile)})]
+        :body (-> req (assoc :query-fn query-fn) views-pdf.user/profile)})]
     ["/profile-pdf/:user-id"
      (fn [{:keys [session headers path-params]}]
        (assert (:id session))
