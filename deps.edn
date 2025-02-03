@@ -23,6 +23,8 @@
                                   :exclusions [com.cognitect/transit-clj]}
  metosin/muuntaja {:mvn/version "0.6.8"}
 
+           clj-pdf/clj-pdf {:mvn/version "2.7.0"}
+
            ;; kit Libs
  io.github.kit-clj/kit-core {:mvn/version "1.0.6"}
  io.github.kit-clj/kit-undertow {:mvn/version "1.0.6"}

@@ -22,7 +22,7 @@
               :hx-vals {:company company :src src}
               :hx-target "#company-search"}
           [:div {:class "flex h-9 items-center hover:bg-slate-100 p-1"}
-           [:img.h-full.ml-1.mr-2 {:src (str "/api/company/" src)}]
+           [:img.h-full.ml-1.mr-2 {:src (str "https://s3.ap-northeast-1.amazonaws.com/launchpoint.simpleui/logos/" src)}]
            [:span company]]])]
       [:div#search-results])
     [:div#search-results]))
@@ -263,7 +263,7 @@
          [:span.m-2.flex (edit-job req i job) (delete-job req i title)]]
         [:div.flex.items-center.my-1
          [:span.mr-4.text-lg company]
-         (when src [:img.w-9 {:src (str "/api/company/" src)}])]
+         (when src [:img.w-9 {:src (str "https://s3.ap-northeast-1.amazonaws.com/launchpoint.simpleui/logos/" src)}])]
         [:div.my-1
          (if (pos? from-month)
            (list ((months) from-month) " " from-year " - ")

@@ -45,7 +45,7 @@
         (components/h3 title)]
        [:div.flex.items-center.my-1
         [:span.mr-4.text-lg company]
-        (when src [:img.w-9 {:src (str "/api/company/" src)}])]
+        (when src [:img.w-9 {:src (str "https://s3.ap-northeast-1.amazonaws.com/launchpoint.simpleui/logos/" src)}])]
        [:div.my-1
         (if (pos? from-month)
           (list ((months) from-month) " " from-year " - ")
@@ -78,6 +78,7 @@
     style
     (str style " " "w-2/3")))
 
+;; pdf? deprecated
 (defn profile [req pdf?]
   (let [{:keys [first_name last_name email]} (user/get-user req)
         {{:keys [user-id]} :path-params} req

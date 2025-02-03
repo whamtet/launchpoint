@@ -1,6 +1,5 @@
 (ns simpleui.launchpoint.web.routes.api
   (:require
-    [clojure.java.io :as io]
     [simpleui.launchpoint.env :refer [dev?]]
     [simpleui.launchpoint.web.controllers.delete :as delete]
     [simpleui.launchpoint.web.controllers.health :as health]
@@ -14,6 +13,7 @@
     [simpleui.launchpoint.web.service.gravatar :as gravatar]
     [simpleui.launchpoint.web.views.checkout :as views.checkout]
     [simpleui.launchpoint.web.views.user :as views.user]
+    [simpleui.launchpoint.web.views.user-pdf :as views.user-pdf]
     [integrant.core :as ig]
     [reitit.coercion.malli :as malli]
     [reitit.ring.coercion :as coercion]
@@ -76,13 +76,6 @@
     ["/logout"
      (fn [{:keys [session]}]
        (login/logout session))]
-    ;; company logo
-    ["/company/:src"
-     (fn [{:keys [session path-params]}]
-       (-> session :id assert)
-       {:status 200
-        :headers {}
-        :body (->> path-params :src (str "logos/") io/input-stream)})]
     ;; self profile raw html
     ["/profile"
      (fn [req]
@@ -105,11 +98,11 @@
                   (assoc :query-fn query-fn)
                   (pdf/pdf-order (headers "cookie") (:order-id path-params)))})]
     ["/profile-pdf"
-     (fn [{:keys [session headers path-params]}]
-       (assert (:id session))
+     (fn [req]
+       (-> req :session :id assert)
        {:status 200
         :headers {"Content-Type" "application/pdf"}
-        :body (pdf/pdf-profile (headers "cookie") nil)})]
+        :body (-> req (assoc :query-fn query-fn) views.user-pdf/profile)})]
     ["/profile-pdf/:user-id"
      (fn [{:keys [session headers path-params]}]
        (assert (:id session))

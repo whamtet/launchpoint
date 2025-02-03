@@ -64,3 +64,9 @@
       (cache/through-cache email gravatar*)
       (get email)
       (update :body #(ByteArrayInputStream. %))))
+
+(defn gravatar-raw [email]
+  (-> cache
+      (cache/through-cache email gravatar*)
+      (get email)
+      :body))
