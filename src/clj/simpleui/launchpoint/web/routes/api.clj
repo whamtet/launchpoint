@@ -5,14 +5,12 @@
     [simpleui.launchpoint.web.controllers.health :as health]
     [simpleui.launchpoint.web.controllers.item-order :as item-order]
     [simpleui.launchpoint.web.controllers.login :as login]
-    [simpleui.launchpoint.web.controllers.pdf :as pdf]
     [simpleui.launchpoint.web.controllers.stripe :as stripe]
-    [simpleui.launchpoint.web.htmx :refer [page-simple redirect-tab]]
+    [simpleui.launchpoint.web.htmx :refer [redirect-tab]]
     [simpleui.launchpoint.web.middleware.exception :as exception]
     [simpleui.launchpoint.web.middleware.formats :as formats]
     [simpleui.launchpoint.web.service.gravatar :as gravatar]
-    [simpleui.launchpoint.web.views.checkout :as views.checkout]
-    [simpleui.launchpoint.web.views.user :as views.user]
+    [simpleui.launchpoint.web.views-pdf.checkout :as views-pdf.checkout]
     [simpleui.launchpoint.web.views-pdf.user :as views-pdf.user]
     [integrant.core :as ig]
     [reitit.coercion.malli :as malli]
@@ -76,27 +74,14 @@
     ["/logout"
      (fn [{:keys [session]}]
        (login/logout session))]
-    ;; self profile raw html
-    ["/profile"
-     (fn [req]
-       (page-simple {:css ["/output.css"]}
-                    (views.user/profile (assoc req :query-fn query-fn) true)))]
-    ["/profile/:user-id"
-     (fn [req]
-       (page-simple {:css ["/output.css"]}
-                    (views.user/profile (assoc req :query-fn query-fn) true)))]
-    ["/order-raw/:order-id"
-     (fn [req]
-       (page-simple {:css ["/output.css"]}
-                    (views.checkout/order-summary (assoc req :query-fn query-fn))))]
     ["/order/:order-id"
-     (fn [{:keys [session headers path-params] :as req}]
-       (assert (:id session))
+     (fn [req]
+       (-> req :session :id assert)
        {:status 200
         :headers {"Content-Type" "application/pdf"}
         :body (-> req
                   (assoc :query-fn query-fn)
-                  (pdf/pdf-order (headers "cookie") (:order-id path-params)))})]
+                  views-pdf.checkout/order-summary)})]
     ["/profile-pdf"
      (fn [req]
        (-> req :session :id assert)
@@ -104,11 +89,11 @@
         :headers {"Content-Type" "application/pdf"}
         :body (-> req (assoc :query-fn query-fn) views-pdf.user/profile)})]
     ["/profile-pdf/:user-id"
-     (fn [{:keys [session headers path-params]}]
-       (assert (:id session))
+     (fn [req]
+       (-> req :session :id assert)
        {:status 200
         :headers {"Content-Type" "application/pdf"}
-        :body (pdf/pdf-profile (headers "cookie") (:user-id path-params))})]
+        :body (-> req (assoc :query-fn query-fn) views-pdf.user/profile)})]
     ["/gravatar/:email"
      (fn [{:keys [session path-params]}]
        (assert (:id session))

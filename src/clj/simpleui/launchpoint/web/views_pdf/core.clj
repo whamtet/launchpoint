@@ -14,4 +14,11 @@
   [:paragraph {:size size} " "])
 
 (def stylesheet
-  {:gray {:color [63 63 70]}})
+  {:gray {:color [63 63 70]}
+   :bold {:style :bold}})
+
+(defn h1 [& content]
+  [:paragraph {:size 20} content])
+
+(defn table [rows]
+  (apply conj [:table {:border false :cell-border false}] rows))
