@@ -105,7 +105,7 @@
 (defcss [:div {:class "w-1/2"}])
 (defcomponent ^:endpoint education-edit-modal [req
                                                ^:long-option i
-                                               degree institution year
+                                               degree institution ^:long year
                                                command]
   (case command
         "save"
@@ -241,7 +241,7 @@
       [:div {:hx-target "this"}
        [:div.my-1.flex.items-center
         (components/h2 degree)
-        [:span.m-2.flex (edit-education req i education) (delete-job req i degree)]]
+        [:span.m-2.flex (edit-education req i education) (delete-education req i degree)]]
        [:div.my-1
         [:span.text-lg institution]]
        [:div.my-1 year]
@@ -260,7 +260,7 @@
        [:div {:hx-target "this"}
         [:div.my-1.flex.items-center
          (components/h2 title)
-         [:span.m-2.flex (edit-job req i job) (delete-job req i title)]]
+         [:span.m-2.flex.min-w-52 (edit-job req i job) (delete-job req i title)]]
         [:div.flex.items-center.my-1
          [:span.mr-4.text-lg company]
          (when src [:img.w-9 {:src (str "https://s3.ap-northeast-1.amazonaws.com/launchpoint.simpleui/logos/" src)}])]
