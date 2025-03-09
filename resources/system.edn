@@ -55,6 +55,4 @@
                               :prod {:jdbc-url #or [#env JDBC_URL "jdbc:sqlite:launchpoint_dev.db?foreign_keys=true"]}}
  :reitit.routes/ui {:base-path "",
                     :env #ig/ref :system/env
-                    :query-fn #ig/ref :db.sql/query-fn}
- :nrepl/server {:port #long #or [#env NREPL_PORT 7001],
-                :bind #or [#env NREPL_HOST "127.0.0.1"]}}
+                    :query-fn #ig/ref :db.sql/query-fn}}

@@ -60,6 +60,7 @@
                    (profile/import-profile req file)
                    response/hx-refresh
                    (catch Throwable t
+                     (prn 't t)
                      (import-disp true)))
         "modal" (import-disp false)
         [:a.ml-2 {:href "#"
