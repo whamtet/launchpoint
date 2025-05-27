@@ -4,7 +4,7 @@
       com.stripe.model.PaymentIntent))
 
 (defn client-secret []
-  (set! Stripe/apiKey "sk_test_4eC39HqLyjWDarjtT1zdp7dc")
+  (set! Stripe/apiKey (System/getenv "STRIPE_KEY"))
   (-> {"amount" 500
        "currency" "usd"}
       PaymentIntent/create
